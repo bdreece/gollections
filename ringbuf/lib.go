@@ -1,22 +1,28 @@
 package ringbuf
 
 type RingBuf struct {
-  data []interface{}
-  size int
-  head int
-  tail int
+  data   []interface{}
+  size   int
+  length int
+  head   int
+  tail   int
 }
 
-func New(size int) *RingBuf {
-  return &RingBuf{
+func New(size int) RingBuf {
+  return RingBuf{
     data: make([]interface{}, size),
     size: size,
+    length: 0,
     head: 0,
     tail: 0,
   }
 }
 
 func (b *RingBuf) Read() interface{} {
+  if b.length <= 0 {
+    return nil
+  }
+
   val := b.data[b.head]
   if b.head += 1; b.head >= b.size {
     b.head = 0
@@ -25,11 +31,15 @@ func (b *RingBuf) Read() interface{} {
 }
 
 func (b RingBuf) Peek() interface{} {
+  if b.length <= 0 {
+    return nil
+  }
   return b.data[b.head]
 }
 
 func (b *RingBuf) Write(val interface{}) {
   b.data[b.tail] = val
+  b.length += 1
   if b.tail += 1; b.tail >= b.size {
     b.tail = 0
   }
