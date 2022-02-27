@@ -7,8 +7,8 @@ type RingBuf struct {
   tail int
 }
 
-func New(size int) RingBuf {
-  return RingBuf{
+func New(size int) *RingBuf {
+  return &RingBuf{
     data: make([]interface{}, size),
     size: size,
     head: 0,
