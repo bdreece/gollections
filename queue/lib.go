@@ -2,7 +2,7 @@ package queue
 
 type Queue []interface{}
 
-func (q *Queue) Enqueue(value []interface{}) {
+func (q *Queue) Enqueue(value interface{}) {
 	*q = append(*q, value)
 }
 

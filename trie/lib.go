@@ -55,9 +55,11 @@ func (t *Trie) AddWord(word string) {
 }
 
 func bfs(node *Node) []string {
-	var values []string
+	var queue Queue
+  var values []string
+  queue.Enqueue(node)
   for child := range node.Children {
-  	
+			
   }
 }
 
