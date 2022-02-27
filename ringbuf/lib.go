@@ -38,4 +38,3 @@ func (b *RingBuf) Write(val interface{}) {
 func (b *RingBuf) Clear() {
   b.data = make([]interface{}, b.size)
 }
-
