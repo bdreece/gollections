@@ -27,6 +27,8 @@ func (b *RingBuf) Read() interface{} {
   if b.head += 1; b.head >= b.size {
     b.head = 0
   }
+
+  b.length -= 1
   return val
 }
 
