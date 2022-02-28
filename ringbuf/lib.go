@@ -24,7 +24,9 @@ func (b *RingBuf) Read() interface{} {
   }
 
   val := b.data[b.head]
-  if b.head += 1; b.head >= b.size {
+  
+  b.head += 1
+  if b.head >= b.size {
     b.head = 0
   }
 
@@ -41,10 +43,13 @@ func (b RingBuf) Peek() interface{} {
 
 func (b *RingBuf) Write(val interface{}) {
   b.data[b.tail] = val
-  b.length += 1
-  if b.tail += 1; b.tail >= b.size {
+  
+  b.tail += 1
+  if b.tail >= b.size {
     b.tail = 0
   }
+  
+  b.length += 1
 }
 
 func (b *RingBuf) Clear() {
