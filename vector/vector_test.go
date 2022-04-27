@@ -4,42 +4,144 @@ import "testing"
 
 const (
 	EXPECTED string = "expected %s: (%d), got: (%d)\n"
+	ERROR    string = "experienced error: %s\n"
 )
+
+func setup() (*Vector[int], []int) {
+	vec := New[int]()
+	numbers := []int{1, 2, 3, 4, 5}
+	for _, number := range numbers {
+		vec.PushBack(number)
+	}
+	return vec, numbers
+}
 
 func TestNew(t *testing.T) {
 	vec := New[int]()
+
 	if len(*vec) != 0 {
 		t.Errorf(EXPECTED, "len", 0, len(*vec))
 	}
 }
 
-func TestPush(t *testing.T) {
+func TestPushBack(t *testing.T) {
 	vec := New[int]()
 	numbers := []int{1, 2, 3, 4, 5}
 
 	for i, number := range numbers {
-		if len(*vec) != i {
-			t.Errorf(EXPECTED, "len", i, len(*vec))
+		n := len(*vec)
+
+		if n != i {
+			t.Errorf(EXPECTED, "len", i, n)
 		}
-		vec.Push(number)
+
+		vec.PushBack(number)
 	}
 }
 
-func TestPop(t *testing.T) {
+func TestPushFront(t *testing.T) {
 	vec := New[int]()
 	numbers := []int{1, 2, 3, 4, 5}
+	for i, number := range numbers {
+		n := len(*vec)
 
-	for _, number := range numbers {
-		vec.Push(number)
+		if n != i {
+			t.Errorf(EXPECTED, "len", i, n)
+		}
+
+		vec.PushFront(number)
 	}
+}
+
+func TestPopFront(t *testing.T) {
+	vec, numbers := setup()
 
 	for i, number := range numbers {
-		if len(*vec) != 5-i {
-			t.Errorf(EXPECTED, "len", 5-i, len(*vec))
+		n := len(*vec)
+		m := len(numbers) - i
+
+		if n != m {
+			t.Errorf(EXPECTED, "len", m, n)
 		}
-		val := vec.Pop()
+
+		val, err := vec.PopFront()
+
+		if err != nil {
+			t.Errorf(ERROR, err.Error())
+		}
+
+		if *val != number {
+			t.Errorf(EXPECTED, "val", number, *val)
+		}
+	}
+}
+
+func TestPopBack(t *testing.T) {
+	vec, numbers := setup()
+
+	for i, number := range numbers {
+		n := len(*vec)
+		m := len(numbers) - i
+
+		if n != m {
+			t.Errorf(EXPECTED, "len", m, n)
+		}
+
+		val, err := vec.PopBack()
+
+		if err != nil {
+			t.Errorf(ERROR, err.Error())
+		}
+
 		if *val != 6-number {
 			t.Errorf(EXPECTED, "val", 6-number, *val)
+		}
+	}
+}
+
+func TestGet(t *testing.T) {
+	vec, numbers := setup()
+	m := len(numbers)
+
+	for i, number := range numbers {
+		n := len(*vec)
+
+		if n != m {
+			t.Errorf(EXPECTED, "len", m, n)
+		}
+
+		val, err := vec.Get(i)
+
+		if err != nil {
+			t.Errorf(ERROR, err.Error())
+		}
+
+		if *val != number {
+			t.Errorf(EXPECTED, "val", number, *val)
+		}
+	}
+}
+
+func TestSet(t *testing.T) {
+	vec, numbers := setup()
+	m := len(numbers)
+
+	for i := range numbers {
+		n := len(*vec)
+
+		if n != m {
+			t.Errorf(EXPECTED, "len", m, n)
+		}
+
+		vec.Set(i, 0)
+		val, err := vec.Get(i)
+
+		if err != nil {
+			t.Errorf(ERROR, err.Error())
+		}
+
+		if *val != 0 {
+			t.Errorf(EXPECTED, "val", 0, *val)
 		}
 	}
 }
