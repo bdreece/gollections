@@ -145,3 +145,51 @@ func TestSet(t *testing.T) {
 		}
 	}
 }
+
+func TestInsertBefore(t *testing.T) {
+	vec, numbers := setup()
+
+	for i := range numbers {
+		n := len(*vec)
+		m := len(numbers) + i
+
+		if n != m {
+			t.Errorf(EXPECTED, "len", m, n)
+		}
+
+		vec.InsertBefore(i, 0)
+		val, err := vec.Get(i)
+
+		if err != nil {
+			t.Errorf(ERROR, err.Error())
+		}
+
+		if *val != 0 {
+			t.Errorf(EXPECTED, "val", 0, *val)
+		}
+	}
+}
+
+func TestInsertAfter(t *testing.T) {
+	vec, numbers := setup()
+
+	for i := range numbers {
+		n := len(*vec)
+		m := len(numbers) + i
+
+		if n != m {
+			t.Errorf(EXPECTED, "len", m, n)
+		}
+
+		vec.InsertAfter(i, 0)
+		val, err := vec.Get(i + 1)
+
+		if err != nil {
+			t.Errorf(ERROR, err.Error())
+		}
+
+		if *val != 0 {
+			t.Errorf(EXPECTED, "val", 0, *val)
+		}
+	}
+}

@@ -77,7 +77,7 @@ func (v Vector[T]) Get(i int) (*T, error) {
 	return val, nil
 }
 
-func (v *Vector[T]) Set(value T, i int) error {
+func (v *Vector[T]) Set(i int, value T) error {
 	n := len(*v)
 	if i >= n {
 		return &IndexOutOfBoundsError{
@@ -89,7 +89,7 @@ func (v *Vector[T]) Set(value T, i int) error {
 	return nil
 }
 
-func (v *Vector[T]) InsertAfter(value T, i int) error {
+func (v *Vector[T]) InsertAfter(i int, value T) error {
 	n := len(*v)
 	if i >= n {
 		return &IndexOutOfBoundsError{
@@ -97,14 +97,14 @@ func (v *Vector[T]) InsertAfter(value T, i int) error {
 			bounds: n,
 		}
 	}
-	before := []T(*v)[:i]
+	before := []T(*v)[:i+1]
 	after := []T(*v)[i+1:]
 	*v = append(before, value)
 	*v = append(*v, after...)
 	return nil
 }
 
-func (v *Vector[T]) InsertBefore(value T, i int) error {
+func (v *Vector[T]) InsertBefore(i int, value T) error {
 	var (
 		before []T
 		after  []T
@@ -117,7 +117,7 @@ func (v *Vector[T]) InsertBefore(value T, i int) error {
 		}
 	}
 	if i > 0 {
-		before = []T(*v)[:i-1]
+		before = []T(*v)[:i]
 		after = []T(*v)[i:]
 	} else {
 		before = []T{}
