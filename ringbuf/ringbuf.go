@@ -75,3 +75,13 @@ func (b *RingBuf[T]) Write(val T) {
 func (b *RingBuf[T]) Clear() {
 	b.data = make([]T, b.capacity)
 }
+
+func (b *RingBuf[T]) Collect(values ...T) {
+	for _, value := range values {
+		b.Write(value)
+	}
+}
+
+func (b *RingBuf[T]) Iterator() *Iterator[T] {
+	return &Iterator[T]{b}
+}
