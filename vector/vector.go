@@ -161,3 +161,7 @@ func (v *Vector[T]) Collect(values ...T) {
 func (v *Vector[T]) Iterator() Iterator[T] {
 	return Iterator[T]{v}
 }
+
+func (v *Vector[T]) ReverseIterator() ReverseIterator[T] {
+	return ReverseIterator[T]{v}
+}
