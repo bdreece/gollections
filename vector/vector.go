@@ -24,17 +24,6 @@
 
 package vector
 
-import "fmt"
-
-type IndexOutOfBoundsError struct {
-	index  int
-	bounds int
-}
-
-func (e *IndexOutOfBoundsError) Error() string {
-	return fmt.Sprintf("index %d > bounds %d", e.index, e.bounds)
-}
-
 type Vector[T any] []T
 
 func New[T any]() *Vector[T] {
