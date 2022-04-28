@@ -11,6 +11,6 @@ func NewIndexOutOfBoundsError(index, bounds int) IndexOutOfBoundsError {
 	return IndexOutOfBoundsError{index, bounds}
 }
 
-func (e *IndexOutOfBoundsError) Error() string {
+func (e IndexOutOfBoundsError) Error() string {
 	return fmt.Sprintf("index %d > bounds %d", e.index, e.bounds)
 }
