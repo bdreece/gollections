@@ -29,7 +29,7 @@ type Collection[T any] interface {
 	Collect(...T)
 }
 
-func Collect[T any, U any](iter Iterator[T], coll Collection[T]) (*Collection[T], error) {
+func Collect[T any](iter Iterator[T], coll Collection[T]) (*Collection[T], error) {
 	var (
 		err error
 		buf []T

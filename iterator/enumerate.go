@@ -24,6 +24,17 @@
 
 package iterator
 
+import "fmt"
+
+type EnumerateError struct {
+	err   error
+	index int
+}
+
+func (e EnumerateError) Error() string {
+	return fmt.Sprintf("enumerate error, i: (%d), error: \"%s\"", e.index, e.err.Error())
+}
+
 type EnumerateItem[T any] struct {
 	item  T
 	index int
@@ -47,9 +58,12 @@ func (e *Enumerate[T]) Next() (*EnumerateItem[T], error) {
 		item:  *item,
 		index: e.index,
 	}
-	e.index += 1
+	e.index++
 	if err != nil {
-		return &enum_item, err
+		return &enum_item, EnumerateError{
+			index: e.index - 1,
+			err:   err,
+		}
 	}
 	return &enum_item, nil
 }

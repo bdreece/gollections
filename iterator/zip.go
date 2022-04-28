@@ -43,14 +43,18 @@ func (z ZipError) Error() string {
 	}
 }
 
-type ZipItem[T any, U any] struct {
-	a *T
-	b *U
+type ZipItem[T, U any] struct {
+	A *T
+	B *U
 }
 
-type Zip[T any, U any] struct {
+type Zip[T, U any] struct {
 	a Iterator[T]
 	b Iterator[U]
+}
+
+func NewZip[T any, U any](a Iterator[T], b Iterator[U]) *Zip[T, U] {
+	return &Zip[T, U]{a, b}
 }
 
 func (z *Zip[T, U]) Next() (ZipItem[T, U], error) {
