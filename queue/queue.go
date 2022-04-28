@@ -60,3 +60,13 @@ func (q Queue[T]) Peek() (*T, error) {
 	*value = []T(q)[0]
 	return value, nil
 }
+
+func (q *Queue[T]) Collect(values ...T) {
+	for _, value := range values {
+		q.Enqueue(value)
+	}
+}
+
+func (q *Queue[T]) Iterator() *Iterator[T] {
+	return &Iterator[T]{q}
+}
