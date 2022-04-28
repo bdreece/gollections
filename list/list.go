@@ -24,6 +24,8 @@
 
 package list
 
+import "github.com/bdreece/gollections/errors"
+
 type node[T any] struct {
 	value T
 	next  *node[T]
@@ -37,11 +39,6 @@ func newNode[T any](value T, next, prev *node[T]) *node[T] {
 type EmptyError struct{}
 
 func (e EmptyError) Error() string { return "list is empty" }
-
-type IndexOutOfBoundsError struct {
-	index  int
-	bounds int
-}
 
 type List[T any] struct {
 	head   *node[T]
@@ -135,10 +132,7 @@ func (l *List[T]) Get(index int) (*T, error) {
 	walk := l.head
 	for i := 0; i < index; i++ {
 		if walk.next == nil {
-			return nil, IndexOutOfBoundsError{
-				index,
-				bounds: i,
-			}
+			return nil, errors.NewIndexOutOfBoundsError(index, i)
 		}
 		walk = walk.next
 	}
