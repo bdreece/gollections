@@ -24,7 +24,7 @@
 
 package ringbuf
 
-import "errors"
+import "github.com/bdreece/gollections/errors"
 
 type RingBuf[T any] struct {
 	data     []T
@@ -46,7 +46,7 @@ func New[T any](capacity int) *RingBuf[T] {
 
 func (b *RingBuf[T]) Read() (*T, error) {
 	if b.length <= 0 {
-		return nil, errors.New("read from empty ringbuf")
+		return nil, errors.Empty{}
 	}
 
 	val := new(T)
@@ -59,7 +59,7 @@ func (b *RingBuf[T]) Read() (*T, error) {
 
 func (b RingBuf[T]) Peek() (*T, error) {
 	if b.length <= 0 {
-		return nil, errors.New("peek from empty ringbuf")
+		return nil, errors.Empty{}
 	}
 	val := new(T)
 	*val = b.data[b.head]
