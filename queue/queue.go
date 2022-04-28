@@ -24,6 +24,10 @@
 
 package queue
 
+type EmptyQueueError struct{}
+
+func (e EmptyQueueError) Error() string { return "queue is empty" }
+
 type Queue[T any] []T
 
 func New[T any]() *Queue[T] {
@@ -34,25 +38,25 @@ func (q *Queue[T]) Enqueue(value T) {
 	*q = append(*q, value)
 }
 
-func (q *Queue[T]) Dequeue() *T {
+func (q *Queue[T]) Dequeue() (*T, error) {
 	n := len(*q)
 	if n == 0 {
-		return nil
+		return nil, EmptyQueueError{}
 	}
 
 	value := new(T)
 	*value = []T(*q)[0]
 	*q = Queue[T]([]T(*q)[1:])
-	return value
+	return value, nil
 }
 
-func (q Queue[T]) Peek() *T {
+func (q Queue[T]) Peek() (*T, error) {
 	n := len(q)
 	if n == 0 {
-		return nil
+		return nil, EmptyQueueError{}
 	}
 
 	value := new(T)
 	*value = []T(q)[0]
-	return value
+	return value, nil
 }
