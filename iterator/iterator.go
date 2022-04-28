@@ -31,11 +31,11 @@ type Iterator[T any] interface {
 func ForEach[T any](iter Iterator[T], fn func(*T)) error {
 	for {
 		item, err := iter.Next()
-		if err != nil {
-			return err
-		}
 		if item == nil {
 			break
+		}
+		if err != nil {
+			return err
 		}
 		(fn)(item)
 	}

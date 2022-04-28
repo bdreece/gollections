@@ -29,7 +29,33 @@ import (
 	"testing"
 )
 
-func TestForEach(t *testing.T) {
+const (
+	EXPECTED string = "expected (%d), got (%d)\n"
+	ERROR    string = "experienced error: \"%s\"\n"
+)
+
+func setup(t *testing.T) (*vector.Vector[int], []int) {
+	t.Log("Setting up test")
 	vec := vector.New[int]()
-	vec.Fill(1, 2, 3, 4, 5)
+	t.Log("Created vector")
+	numbers := []int{1, 2, 3, 4, 5}
+	for _, number := range numbers {
+		vec.PushBack(number)
+		t.Logf("Pushed (%d) to back of vector\n", number)
+	}
+	return vec, numbers
+}
+
+func TestForEach(t *testing.T) {
+	vec, numbers := setup(t)
+	iter := vec.Iterator()
+	i := 0
+	if err := ForEach[int](&iter, func(item *int) {
+		if *item != numbers[i] {
+			t.Errorf(EXPECTED, numbers[i], item)
+			i++
+		}
+	}); err != nil {
+		t.Errorf(ERROR, err.Error())
+	}
 }
