@@ -133,11 +133,5 @@ func (v *Vector[T]) Collect(items ...T) {
 // in the Vector. This method implements part
 // of the Iterator interface.
 func (v *Vector[T]) Iterator() *Iterator[T] {
-	return &Iterator[T]{v}
-}
-
-// ReverseIterator returns an iterator over the items
-// of the Vector in reverse.
-func (v *Vector[T]) ReverseIterator() *ReverseIterator[T] {
-	return &ReverseIterator[T]{v}
+	return &Iterator[T]{v, 0}
 }
