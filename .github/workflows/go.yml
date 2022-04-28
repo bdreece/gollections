@@ -21,5 +21,11 @@ jobs:
     - name: Build
       run: go build -v ./...
 
-    - name: Test
-      run: go test -v ./...
+    - name: Test Vector
+      run: cd vector; go test -v; cd ..
+
+    - name: Test RingBuf
+      run: cd ringbuf; go test -v; cd ..
+
+    - name: Test List
+      run: cd list; go test -v; cd ..
