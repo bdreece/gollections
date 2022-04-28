@@ -2,15 +2,19 @@ package errors
 
 import "fmt"
 
-type IndexOutOfBoundsError struct {
+type IndexOutOfBounds struct {
 	index  int
 	bounds int
 }
 
-func NewIndexOutOfBoundsError(index, bounds int) IndexOutOfBoundsError {
-	return IndexOutOfBoundsError{index, bounds}
+func NewIndexOutOfBounds(index, bounds int) IndexOutOfBounds {
+	return IndexOutOfBounds{index, bounds}
 }
 
-func (e IndexOutOfBoundsError) Error() string {
+func (e IndexOutOfBounds) Error() string {
 	return fmt.Sprintf("index %d > bounds %d", e.index, e.bounds)
 }
+
+type Empty struct{}
+
+func (e Empty) Error() string { return "collection is empty" }
