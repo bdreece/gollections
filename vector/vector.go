@@ -24,6 +24,8 @@
 
 package vector
 
+import "github.com/bdreece/gollections/errors"
+
 type Vector[T any] []T
 
 func New[T any]() *Vector[T] {
@@ -42,10 +44,7 @@ func (v *Vector[T]) PushFront(value T) {
 func (v *Vector[T]) PopFront() (*T, error) {
 	n := len(*v)
 	if n == 0 {
-		return nil, &IndexOutOfBoundsError{
-			index:  0,
-			bounds: 0,
-		}
+		return nil, errors.NewIndexOutOfBoundsError(0, 0)
 	}
 
 	val := new(T)
@@ -61,10 +60,7 @@ func (v *Vector[T]) PopFront() (*T, error) {
 func (v *Vector[T]) PopBack() (*T, error) {
 	n := len(*v)
 	if n == 0 {
-		return nil, &IndexOutOfBoundsError{
-			index:  0,
-			bounds: 0,
-		}
+		return nil, errors.NewIndexOutOfBoundsError(0, 0)
 	}
 	val := new(T)
 	if n > 0 {
@@ -80,23 +76,15 @@ func (v *Vector[T]) PopBack() (*T, error) {
 func (v Vector[T]) Get(i int) (*T, error) {
 	n := len(v)
 	if i > n {
-		return nil, &IndexOutOfBoundsError{
-			index:  i,
-			bounds: n,
-		}
+		return nil, errors.NewIndexOutOfBoundsError(i, n)
 	}
-	val := new(T)
-	*val = []T(v)[i]
-	return val, nil
+	return &[]T(v)[i], nil
 }
 
 func (v *Vector[T]) Set(i int, value T) error {
 	n := len(*v)
 	if i >= n {
-		return &IndexOutOfBoundsError{
-			index:  i,
-			bounds: n,
-		}
+		return errors.NewIndexOutOfBoundsError(i, n)
 	}
 	[]T(*v)[i] = value
 	return nil
@@ -105,10 +93,7 @@ func (v *Vector[T]) Set(i int, value T) error {
 func (v *Vector[T]) InsertAfter(i int, value T) error {
 	n := len(*v)
 	if i >= n {
-		return &IndexOutOfBoundsError{
-			index:  i,
-			bounds: n,
-		}
+		return errors.NewIndexOutOfBoundsError(i, n)
 	}
 	before := []T(*v)[:i+1]
 	after := []T(*v)[i+1:]
@@ -124,10 +109,7 @@ func (v *Vector[T]) InsertBefore(i int, value T) error {
 	)
 	n := len(*v)
 	if i >= n {
-		return &IndexOutOfBoundsError{
-			index:  i,
-			bounds: n,
-		}
+		return errors.NewIndexOutOfBoundsError(i, n)
 	}
 	if i > 0 {
 		before = []T(*v)[:i]
