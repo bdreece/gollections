@@ -1,0 +1,46 @@
+package iter
+
+import "fmt"
+
+type ZipError struct {
+	a error
+	b error
+}
+
+func (z ZipError) Error() string {
+	if z.a != nil && z.b != nil {
+		return fmt.Sprintf("iter a: (%s), iter b: (%s)", z.a.Error(), z.b.Error())
+	} else if z.a != nil {
+		return fmt.Sprintf("iter a: (%s)", z.a.Error())
+	} else if z.b != nil {
+		return fmt.Sprintf("iter b: (%s)", z.b.Error())
+	} else {
+		return "unreachable! bug!"
+	}
+}
+
+type ZipItem[T any, U any] struct {
+	a *T
+	b *U
+}
+
+type Zip[T any, U any] struct {
+	a Iterator[T]
+	b Iterator[U]
+}
+
+func (z *Zip[T, U]) Next() (ZipItem[T, U], error) {
+	a, err_a := z.a.Next()
+	b, err_b := z.b.Next()
+
+	item := ZipItem[T, U]{a, b}
+
+	if err_a != nil || err_b != nil {
+		return item, ZipError{
+			a: err_a,
+			b: err_b,
+		}
+	} else {
+		return item, nil
+	}
+}
