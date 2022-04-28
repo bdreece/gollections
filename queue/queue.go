@@ -1,72 +1,9 @@
-/**
- * MIT License
- *
- * Copyright (c) 2022 Brian Reece
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+// MIT License
+// Copyright (c) 2022 Brian Reece
 
 package queue
 
-type EmptyQueueError struct{}
-
-func (e EmptyQueueError) Error() string { return "queue is empty" }
-
-type Queue[T any] []T
-
-func New[T any]() *Queue[T] {
-	return new(Queue[T])
-}
-
-func (q *Queue[T]) Enqueue(value T) {
-	*q = append(*q, value)
-}
-
-func (q *Queue[T]) Dequeue() (*T, error) {
-	n := len(*q)
-	if n == 0 {
-		return nil, EmptyQueueError{}
-	}
-
-	value := new(T)
-	*value = []T(*q)[0]
-	*q = Queue[T]([]T(*q)[1:])
-	return value, nil
-}
-
-func (q Queue[T]) Peek() (*T, error) {
-	n := len(q)
-	if n == 0 {
-		return nil, EmptyQueueError{}
-	}
-
-	value := new(T)
-	*value = []T(q)[0]
-	return value, nil
-}
-
-func (q *Queue[T]) Collect(values ...T) {
-	for _, value := range values {
-		q.Enqueue(value)
-	}
-}
-
-func (q *Queue[T]) Iterator() *Iterator[T] {
-	return &Iterator[T]{q}
+type Queue[T any] interface {
+	PushBack(T)
+	PopFront() (*T, error)
 }

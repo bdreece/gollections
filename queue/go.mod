@@ -1,3 +1,3 @@
-module github.com/bdreece/go-structs/queue
+module github.com/bdreece/gollections/queue
 
 go 1.18
