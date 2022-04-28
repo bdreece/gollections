@@ -30,6 +30,19 @@ type node[T any] struct {
 	prev  *node[T]
 }
 
+func newNode[T any](value T, next, prev *node[T]) *node[T] {
+	return &node[T]{value, next, prev}
+}
+
+type EmptyError struct{}
+
+func (e EmptyError) Error() string { return "list is empty" }
+
+type IndexOutOfBoundsError struct {
+	index  int
+	bounds int
+}
+
 type List[T any] struct {
 	head   *node[T]
 	length int
@@ -39,11 +52,34 @@ func New[T any]() *List[T] {
 	return &List[T]{head: nil, length: 0}
 }
 
-func (l *List[T]) Push(val T) {
-	l.length += 1
+func (l *List[T]) Front() (*T, error) {
 	if l.head == nil {
-		l.head = new(node[T])
-		l.head.value = val
+		return nil, EmptyError{}
+	}
+
+	val := new(T)
+	*val = l.head.value
+	return val, nil
+}
+
+func (l *List[T]) Back() (*T, error) {
+	if l.head == nil {
+		return nil, EmptyError{}
+	}
+
+	walk := l.head
+	for walk.next != nil {
+		walk = walk.next
+	}
+
+	val := new(T)
+	*val = walk.value
+	return val, nil
+}
+
+func (l *List[T]) PushBack(val T) {
+	if l.head == nil {
+		l.head = newNode(val, nil, nil)
 		return
 	}
 
@@ -51,18 +87,69 @@ func (l *List[T]) Push(val T) {
 	for walk.next != nil {
 		walk = walk.next
 	}
-	walk.next = new(node[T])
-	walk.next.value = val
+
+	walk.next = newNode(val, nil, walk)
+	l.length += 1
 }
 
-func (l *List[T]) Pop() *T {
+func (l *List[T]) PushFront(val T) {
+	l.head = newNode(val, l.head, nil)
+	l.head.next.prev = l.head
+	l.length += 1
+}
+
+func (l *List[T]) PopFront() (*T, error) {
 	if l.head == nil {
-		return nil
+		return nil, EmptyError{}
 	}
 
 	value := new(T)
 	*value = l.head.value
 	l.head = l.head.next
 	l.length -= 1
-	return value
+	return value, nil
+}
+
+func (l *List[T]) PopBack() (*T, error) {
+	if l.head == nil {
+		return nil, EmptyError{}
+	}
+
+	walk := l.head
+	for walk.next != nil {
+		walk = walk.next
+	}
+
+	value := new(T)
+	*value = walk.value
+	walk.prev.next = nil
+	walk.prev = nil
+	return value, nil
+}
+
+func (l *List[T]) Get(index int) (*T, error) {
+	if l.head == nil {
+		return nil, EmptyError{}
+	}
+
+	walk := l.head
+	for i := 0; i < index; i++ {
+		if walk.next == nil {
+			return nil, IndexOutOfBoundsError{
+				index,
+				bounds: i,
+			}
+		}
+		walk = walk.next
+	}
+
+	val := new(T)
+	*val = walk.value
+	walk.prev.next = nil
+	walk.prev = nil
+	if walk.next != nil {
+		walk.next.prev = nil
+		walk.next = nil
+	}
+	return val, nil
 }
