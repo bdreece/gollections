@@ -152,7 +152,7 @@ func (v *Vector[T]) InsertBefore(i int, value T) error {
 	return nil
 }
 
-func (v *Vector[T]) Fill(values ...T) {
+func (v *Vector[T]) Collect(values ...T) {
 	for _, value := range values {
 		v.PushBack(value)
 	}
