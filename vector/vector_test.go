@@ -19,6 +19,8 @@ func setup() (*Vector[int], []int) {
 	return vec, numbers
 }
 
+// TestNew asserts that the New function
+// properly constructs an empty Vector.
 func TestNew(t *testing.T) {
 	vec := New[int]()
 
@@ -27,6 +29,9 @@ func TestNew(t *testing.T) {
 	}
 }
 
+// TestPushBack asserts that the PushBack
+// function properly appends a Vector with
+// items.
 func TestPushBack(t *testing.T) {
 	vec := New[int]()
 	numbers := []int{1, 2, 3, 4, 5}
@@ -42,6 +47,9 @@ func TestPushBack(t *testing.T) {
 	}
 }
 
+// TestPushFront asserts that the PushFront
+// function properly prepends a Vector with
+// items.
 func TestPushFront(t *testing.T) {
 	vec := New[int]()
 	numbers := []int{1, 2, 3, 4, 5}
@@ -56,6 +64,9 @@ func TestPushFront(t *testing.T) {
 	}
 }
 
+// TestPopFront asserts that the PopFront
+// function properly removes and returns
+// the first item in the Vector
 func TestPopFront(t *testing.T) {
 	vec, numbers := setup()
 
@@ -79,6 +90,9 @@ func TestPopFront(t *testing.T) {
 	}
 }
 
+// TestPopBack asserts that the PopBack
+// function properly removes and returns
+// the last item in the Vector.
 func TestPopBack(t *testing.T) {
 	vec, numbers := setup()
 
@@ -102,6 +116,9 @@ func TestPopBack(t *testing.T) {
 	}
 }
 
+// TestGet asserts that the Get function
+// properly returns a pointer to an item
+// in a Vector.
 func TestGet(t *testing.T) {
 	vec, numbers := setup()
 	m := len(numbers)
@@ -125,6 +142,9 @@ func TestGet(t *testing.T) {
 	}
 }
 
+// TestSet asserts that the Set function
+// properly writes a new value to an item
+// in a Vector
 func TestSet(t *testing.T) {
 	vec, numbers := setup()
 	m := len(numbers)
@@ -149,6 +169,9 @@ func TestSet(t *testing.T) {
 	}
 }
 
+// TestInsertBefore asserts that the InsertBefore
+// function properly inserts an item into the Vector
+// before the specified index.
 func TestInsertBefore(t *testing.T) {
 	vec, numbers := setup()
 
@@ -173,6 +196,9 @@ func TestInsertBefore(t *testing.T) {
 	}
 }
 
+// TestInsertAfter asserts that the InsertAfter
+// function properly inserts an item into the Vector
+// after the specified index
 func TestInsertAfter(t *testing.T) {
 	vec, numbers := setup()
 
