@@ -44,7 +44,7 @@ func (v *Vector[T]) PushFront(value T) {
 func (v *Vector[T]) PopFront() (*T, error) {
 	n := len(*v)
 	if n == 0 {
-		return nil, errors.NewIndexOutOfBoundsError(0, 0)
+		return nil, errors.NewIndexOutOfBounds(0, 0)
 	}
 
 	val := new(T)
@@ -60,7 +60,7 @@ func (v *Vector[T]) PopFront() (*T, error) {
 func (v *Vector[T]) PopBack() (*T, error) {
 	n := len(*v)
 	if n == 0 {
-		return nil, errors.NewIndexOutOfBoundsError(0, 0)
+		return nil, errors.NewIndexOutOfBounds(0, 0)
 	}
 	val := new(T)
 	if n > 0 {
@@ -76,7 +76,7 @@ func (v *Vector[T]) PopBack() (*T, error) {
 func (v Vector[T]) Get(i int) (*T, error) {
 	n := len(v)
 	if i > n {
-		return nil, errors.NewIndexOutOfBoundsError(i, n)
+		return nil, errors.NewIndexOutOfBounds(i, n)
 	}
 	return &[]T(v)[i], nil
 }
@@ -84,7 +84,7 @@ func (v Vector[T]) Get(i int) (*T, error) {
 func (v *Vector[T]) Set(i int, value T) error {
 	n := len(*v)
 	if i >= n {
-		return errors.NewIndexOutOfBoundsError(i, n)
+		return errors.NewIndexOutOfBounds(i, n)
 	}
 	[]T(*v)[i] = value
 	return nil
@@ -93,7 +93,7 @@ func (v *Vector[T]) Set(i int, value T) error {
 func (v *Vector[T]) InsertAfter(i int, value T) error {
 	n := len(*v)
 	if i >= n {
-		return errors.NewIndexOutOfBoundsError(i, n)
+		return errors.NewIndexOutOfBounds(i, n)
 	}
 	before := []T(*v)[:i+1]
 	after := []T(*v)[i+1:]
@@ -109,7 +109,7 @@ func (v *Vector[T]) InsertBefore(i int, value T) error {
 	)
 	n := len(*v)
 	if i >= n {
-		return errors.NewIndexOutOfBoundsError(i, n)
+		return errors.NewIndexOutOfBounds(i, n)
 	}
 	if i > 0 {
 		before = []T(*v)[:i]
