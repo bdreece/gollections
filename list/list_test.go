@@ -10,6 +10,8 @@ const (
 	ERROR    string = "experienced error: \"%s\"\n"
 )
 
+// TestNew asserts that the New function
+// properly constructs a new List.
 func TestNew(t *testing.T) {
 	list := New[int]()
 	if list.length != 0 {
@@ -17,6 +19,9 @@ func TestNew(t *testing.T) {
 	}
 }
 
+// TestPushBack asserts that the PushBack
+// function properly appends the List with
+// an item.
 func TestPushBack(t *testing.T) {
 	list := New[int]()
 	numbers := []int{1, 2, 3, 4, 5}
@@ -29,6 +34,9 @@ func TestPushBack(t *testing.T) {
 	}
 }
 
+// TestPopFront asserts that the PopFront
+// function properly removes and returns
+// an item from the front of the List.
 func TestPopFront(t *testing.T) {
 	list := New[int]()
 	numbers := []int{1, 2, 3, 4, 5}
