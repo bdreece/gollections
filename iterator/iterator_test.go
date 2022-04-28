@@ -1,26 +1,5 @@
-/**
- * MIT License
- *
- * Copyright (c) 2022 Brian Reece
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+// MIT License
+// Copyright (c) 2022 Brian Reece
 
 package iterator
 
@@ -48,14 +27,35 @@ func setup(t *testing.T) (*vector.Vector[int], []int) {
 
 func TestForEach(t *testing.T) {
 	vec, numbers := setup(t)
-	iter := vec.Iterator()
 	i := 0
-	if err := ForEach[int](&iter, func(item *int) {
-		if *item != numbers[i] {
-			t.Errorf(EXPECTED, numbers[i], item)
+	if err := ForEach[int](
+		vec.Iterator(),
+		func(item *int) {
+			if *item != numbers[i] {
+				t.Errorf(EXPECTED, numbers[i], item)
+			}
 			i++
-		}
-	}); err != nil {
+		},
+	); err != nil {
+		t.Errorf(ERROR, err.Error())
+	}
+}
+
+func TestEnumerate(t *testing.T) {
+	vec, numbers := setup(t)
+	i := 0
+	if err := ForEach[EnumerateItem[int]](
+		NewEnumerate[int](vec.Iterator()),
+		func(item *EnumerateItem[int]) {
+			if item.index != i {
+				t.Errorf(EXPECTED, i, item.index)
+			}
+			if item.item != numbers[i] {
+				t.Errorf(EXPECTED, numbers[i], item.item)
+			}
+			i++
+		},
+	); err != nil {
 		t.Errorf(ERROR, err.Error())
 	}
 }

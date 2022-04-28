@@ -1,6 +1,9 @@
+// MIT License
+// Copyright (c) 2022 Brian Reece
+
 package iterator
 
-type FilterPredicate[T any] func(T) bool
+type FilterPredicate[T any] func(*T) bool
 
 type Filter[T any] struct {
 	iter Iterator[T]
@@ -17,7 +20,7 @@ func (f *Filter[T]) Next() (*T, error) {
 		if item == nil {
 			return nil, nil
 		}
-		if !(f.pred)(*item) {
+		if !(f.pred)(item) {
 			continue
 		}
 		if err != nil {
