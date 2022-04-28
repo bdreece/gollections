@@ -29,11 +29,16 @@ func checkFields(t *testing.T, b *RingBuf[int], length, capacity, head, tail int
 
 }
 
+// TestNew asserts that the New function
+// properly constructs a RingBuf with the
+// specified capacity.
 func TestNew(t *testing.T) {
 	ringbuf := New[int](5)
 	checkFields(t, ringbuf, 0, 5, 0, 0)
 }
 
+// TestWrite asserts that the Write function
+// properly writes an item into the RingBuf.
 func TestWrite(t *testing.T) {
 	ringbuf := New[int](5)
 	numbers := []int{1, 2, 3, 4, 5}
@@ -44,6 +49,8 @@ func TestWrite(t *testing.T) {
 	}
 }
 
+// TestRead asserts that the Read function
+// properly reads an item from the RingBuf.
 func TestRead(t *testing.T) {
 	ringbuf := New[int](5)
 	numbers := []int{1, 2, 3, 4, 5}
@@ -64,6 +71,9 @@ func TestRead(t *testing.T) {
 	}
 }
 
+// TestPeek asserts that the Peek function
+// properly reads an item from the RingBuf
+// without advancing the head pointer.
 func TestPeek(t *testing.T) {
 	ringbuf := New[int](5)
 	numbers := []int{1, 2, 3, 4, 5}
