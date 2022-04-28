@@ -36,10 +36,6 @@ func newNode[T any](value T, next, prev *node[T]) *node[T] {
 	return &node[T]{value, next, prev}
 }
 
-type EmptyError struct{}
-
-func (e EmptyError) Error() string { return "list is empty" }
-
 type List[T any] struct {
 	head   *node[T]
 	length int
@@ -51,7 +47,7 @@ func New[T any]() *List[T] {
 
 func (l *List[T]) Front() (*T, error) {
 	if l.head == nil {
-		return nil, EmptyError{}
+		return nil, errors.Empty{}
 	}
 
 	val := new(T)
@@ -61,7 +57,7 @@ func (l *List[T]) Front() (*T, error) {
 
 func (l *List[T]) Back() (*T, error) {
 	if l.head == nil {
-		return nil, EmptyError{}
+		return nil, errors.Empty{}
 	}
 
 	walk := l.head
@@ -75,6 +71,7 @@ func (l *List[T]) Back() (*T, error) {
 }
 
 func (l *List[T]) PushBack(val T) {
+	l.length += 1
 	if l.head == nil {
 		l.head = newNode(val, nil, nil)
 		return
@@ -86,7 +83,6 @@ func (l *List[T]) PushBack(val T) {
 	}
 
 	walk.next = newNode(val, nil, walk)
-	l.length += 1
 }
 
 func (l *List[T]) PushFront(val T) {
@@ -97,7 +93,7 @@ func (l *List[T]) PushFront(val T) {
 
 func (l *List[T]) PopFront() (*T, error) {
 	if l.head == nil {
-		return nil, EmptyError{}
+		return nil, errors.Empty{}
 	}
 
 	value := new(T)
@@ -109,7 +105,7 @@ func (l *List[T]) PopFront() (*T, error) {
 
 func (l *List[T]) PopBack() (*T, error) {
 	if l.head == nil {
-		return nil, EmptyError{}
+		return nil, errors.Empty{}
 	}
 
 	walk := l.head
@@ -121,18 +117,19 @@ func (l *List[T]) PopBack() (*T, error) {
 	*value = walk.value
 	walk.prev.next = nil
 	walk.prev = nil
+	l.length -= 1
 	return value, nil
 }
 
 func (l *List[T]) Get(index int) (*T, error) {
 	if l.head == nil {
-		return nil, EmptyError{}
+		return nil, errors.Empty{}
 	}
 
 	walk := l.head
 	for i := 0; i < index; i++ {
 		if walk.next == nil {
-			return nil, errors.NewIndexOutOfBoundsError(index, i)
+			return nil, errors.NewIndexOutOfBounds(index, i)
 		}
 		walk = walk.next
 	}
