@@ -5,11 +5,14 @@ package iterator
 
 import "fmt"
 
+// ZipError combines errors from both zipped iterators.
 type ZipError struct {
 	a error
 	b error
 }
 
+// Error returns an error message combining errors
+// from both zipped iterators.
 func (z ZipError) Error() string {
 	if z.a != nil && z.b != nil {
 		return fmt.Sprintf("iter a: (%s), iter b: (%s)", z.a.Error(), z.b.Error())
@@ -22,20 +25,26 @@ func (z ZipError) Error() string {
 	}
 }
 
+// ZipItem is the type of item a Zip iterates over.
 type ZipItem[T, U any] struct {
 	A *T
 	B *U
 }
 
+// Zip combines two iterators of potentially different item types.
 type Zip[T, U any] struct {
 	a Iterator[T]
 	b Iterator[U]
 }
 
+// NewZip constructs a new Zip iterator.
 func NewZip[T any, U any](a Iterator[T], b Iterator[U]) *Zip[T, U] {
 	return &Zip[T, U]{a, b}
 }
 
+// Next returns the next items from the zipped iterators.
+// This method implements the Iterator interface. Returns
+// item, ZipError on collection error.
 func (z *Zip[T, U]) Next() (ZipItem[T, U], error) {
 	a, err_a := z.a.Next()
 	b, err_b := z.b.Next()
