@@ -1,4 +1,4 @@
-module github.com/bdreece/go-structs/ringbuf
+module github.com/bdreece/gollections/ringbuf
 
 go 1.18
 
