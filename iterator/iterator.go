@@ -9,6 +9,10 @@ type Iterator[T any] interface {
 	Next() (*T, error)
 }
 
+type Reverse[T any] interface {
+    Prev() (*T, error)
+}
+
 // Any returns true if for any item in the iterator,
 // pred returns true. Returns false, error upon collection
 // error.
