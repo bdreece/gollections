@@ -10,6 +10,16 @@ const (
 	ERROR    string = "experienced error: %s\n"
 )
 
+func setup() (*RingBuf[int], []int) {
+	buf := New[int](5)
+	numbers := []int{1, 2, 3, 4, 5}
+	for _, a := range numbers {
+		buf.Write(a)
+	}
+
+	return buf, numbers
+}
+
 func checkFields(t *testing.T, b *RingBuf[int], length, capacity, head, tail int) {
 	if b.length != length {
 		t.Errorf(EXPECTED, "len", length, b.length)
@@ -52,12 +62,7 @@ func TestWrite(t *testing.T) {
 // TestRead asserts that the Read function
 // properly reads an item from the RingBuf.
 func TestRead(t *testing.T) {
-	ringbuf := New[int](5)
-	numbers := []int{1, 2, 3, 4, 5}
-
-	for _, number := range numbers {
-		ringbuf.Write(number)
-	}
+	ringbuf, numbers := setup()
 
 	for i, number := range numbers {
 		checkFields(t, ringbuf, 5-i, 5, i, 0)
@@ -71,16 +76,28 @@ func TestRead(t *testing.T) {
 	}
 }
 
+// TestClear asserts that the Clear function
+// properly zeroes all items in the ring
+// buffer.
+func TestClear(t *testing.T) {
+	ringbuf, _ := setup()
+	ringbuf.Clear()
+	val, err := ringbuf.Read()
+	for ; val != nil; val, err = ringbuf.Read() {
+		if err != nil {
+			t.Errorf(ERROR, err.Error())
+		}
+		if *val != 0 {
+			t.Errorf(EXPECTED, "val", 0, *val)
+		}
+	}
+}
+
 // TestPeek asserts that the Peek function
 // properly reads an item from the RingBuf
 // without advancing the head pointer.
 func TestPeek(t *testing.T) {
-	ringbuf := New[int](5)
-	numbers := []int{1, 2, 3, 4, 5}
-
-	for _, number := range numbers {
-		ringbuf.Write(number)
-	}
+	ringbuf, numbers := setup()
 
 	for range numbers {
 		checkFields(t, ringbuf, 5, 5, 0, 0)
