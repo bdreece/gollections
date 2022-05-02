@@ -13,6 +13,26 @@ func New[T any]() *Vector[T] {
 	return new(Vector[T])
 }
 
+// Front returns a pointer to the first item
+// in the vector. Returns nil, errors.Empty if
+// the vector is empty.
+func (v Vector[T]) Front() (*T, error) {
+	if len(v) == 0 {
+		return nil, errors.Empty{}
+	}
+	return &[]T(v)[0], nil
+}
+
+// Back returns a pointer to the last item
+// in the vector. Returns nil, errors.Empty if
+// the vector is empty.
+func (v Vector[T]) Back() (*T, error) {
+	if len(v) == 0 {
+		return nil, errors.Empty{}
+	}
+	return &[]T(v)[len(v)-1], nil
+}
+
 // PushBack appends the Vector with an item.
 func (v *Vector[T]) PushBack(item T) {
 	*v = append([]T(*v), item)
@@ -81,6 +101,16 @@ func (v *Vector[T]) Set(i int, value T) error {
 	}
 	[]T(*v)[i] = value
 	return nil
+}
+
+// Clear sets all items in the vector to
+// T's zero value.
+func (v *Vector[T]) Clear() {
+	if n := len(*v); n > 0 {
+		for i := 0; i < n; i++ {
+			[]T(*v)[i] = *new(T)
+		}
+	}
 }
 
 // InsertAfter inserts an item directly after index i.

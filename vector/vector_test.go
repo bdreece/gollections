@@ -29,6 +29,34 @@ func TestNew(t *testing.T) {
 	}
 }
 
+// TestFront asserts that the Front function
+// properly returns the first element in the
+// vector.
+func TestFront(t *testing.T) {
+	vec, numbers := setup()
+	val, err := vec.Front()
+	if err != nil {
+		t.Errorf(ERROR, err.Error())
+	}
+	if *val != numbers[0] {
+		t.Errorf(EXPECTED, "val", numbers[0], *val)
+	}
+}
+
+// TestBack asserts that the Back function
+// properly returns the last element in the
+// vector.
+func TestBack(t *testing.T) {
+	vec, numbers := setup()
+	val, err := vec.Back()
+	if err != nil {
+		t.Errorf(ERROR, err.Error())
+	}
+	if *val != numbers[len(numbers)-1] {
+		t.Errorf(EXPECTED, "val", numbers[len(numbers)-1], *val)
+	}
+}
+
 // TestPushBack asserts that the PushBack
 // function properly appends a Vector with
 // items.
@@ -165,6 +193,19 @@ func TestSet(t *testing.T) {
 
 		if *val != 0 {
 			t.Errorf(EXPECTED, "val", 0, *val)
+		}
+	}
+}
+
+// TestClear asserts that the Clear function
+// properly sets every element to the zero
+// value of its type.
+func TestClear(t *testing.T) {
+	vec, _ := setup()
+	vec.Clear()
+	for _, val := range *vec {
+		if val != 0 {
+			t.Errorf(EXPECTED, "val", 0, val)
 		}
 	}
 }
