@@ -172,6 +172,11 @@ func (v *Vector[T]) Extend(other iterator.Collection[T]) {
 	})
 }
 
+// Truncate reconstructs an empty vector.
+func (v *Vector[T]) Truncate() {
+	*v = *new(Vector[T])
+}
+
 // Collect inserts a variable number of items
 // into the Vector. This method implements part
 // of the Iterator interface.
