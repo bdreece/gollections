@@ -184,6 +184,6 @@ func (v *Vector[T]) Collect(items ...T) {
 // Iterator returns an iterator over the items
 // in the Vector. This method implements part
 // of the Iterator interface.
-func (v *Vector[T]) Iterator() *Iterator[T] {
+func (v *Vector[T]) Iterator() iterator.Iterator[T] {
 	return &Iterator[T]{v, 0}
 }
