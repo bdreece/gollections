@@ -166,10 +166,13 @@ func (v *Vector[T]) Reserve(additional int) {
 
 // Extend appends all the values from another collection
 // into the vector.
-func (v *Vector[T]) Extend(other iterator.Collection[T]) {
-	iterator.ForEach(other.Iterator(), func(item *T) {
+func (v *Vector[T]) Extend(other iterator.Collection[T]) error {
+	if err := iterator.ForEach(other.Iterator(), func(item *T) {
 		v.PushBack(*item)
-	})
+	}); err != nil {
+		return err
+	}
+	return nil
 }
 
 // Truncate reconstructs an empty vector.
