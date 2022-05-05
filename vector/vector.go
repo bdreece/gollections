@@ -3,7 +3,10 @@
 
 package vector
 
-import "github.com/bdreece/gollections/errors"
+import (
+	"github.com/bdreece/gollections/errors"
+	"github.com/bdreece/gollections/iterator"
+)
 
 // Vector is a slice of contiguous data.
 type Vector[T any] []T
@@ -69,7 +72,7 @@ func (v *Vector[T]) PopFront() (*T, error) {
 func (v *Vector[T]) PopBack() (*T, error) {
 	n := len(*v)
 	if n == 0 {
-		return nil, errors.NewIndexOutOfBounds(0, 0)
+		return nil, errors.IndexOutOfBounds{Index: 0, Bounds: 0}
 	}
 	val := new(T)
 	if n > 0 {
@@ -87,7 +90,7 @@ func (v *Vector[T]) PopBack() (*T, error) {
 func (v Vector[T]) Get(i int) (*T, error) {
 	n := len(v)
 	if i > n {
-		return nil, errors.NewIndexOutOfBounds(i, n)
+		return nil, errors.IndexOutOfBounds{Index: i, Bounds: n}
 	}
 	return &[]T(v)[i], nil
 }
@@ -97,7 +100,7 @@ func (v Vector[T]) Get(i int) (*T, error) {
 func (v *Vector[T]) Set(i int, value T) error {
 	n := len(*v)
 	if i >= n {
-		return errors.NewIndexOutOfBounds(i, n)
+		return errors.IndexOutOfBounds{Index: i, Bounds: n}
 	}
 	[]T(*v)[i] = value
 	return nil
@@ -118,7 +121,7 @@ func (v *Vector[T]) Clear() {
 func (v *Vector[T]) InsertAfter(i int, item T) error {
 	n := len(*v)
 	if i >= n {
-		return errors.NewIndexOutOfBounds(i, n)
+		return errors.IndexOutOfBounds{Index: i, Bounds: n}
 	}
 	before := []T(*v)[:i+1]
 	after := []T(*v)[i+1:]
@@ -136,7 +139,7 @@ func (v *Vector[T]) InsertBefore(i int, value T) error {
 	)
 	n := len(*v)
 	if i >= n {
-		return errors.NewIndexOutOfBounds(i, n)
+		return errors.IndexOutOfBounds{Index: i, Bounds: n}
 	}
 	if i > 0 {
 		before = []T(*v)[:i]
@@ -159,6 +162,14 @@ func (v *Vector[T]) Reserve(additional int) {
 	for i, item := range oldVec {
 		[]T(*v)[i] = item
 	}
+}
+
+// Extend appends all the values from another collection
+// into the vector.
+func (v *Vector[T]) Extend(other iterator.Collection[T]) {
+	iterator.ForEach(other.Iterator(), func(item *T) {
+		v.PushBack(*item)
+	})
 }
 
 // Collect inserts a variable number of items
