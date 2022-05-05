@@ -126,7 +126,7 @@ func (l *List[T]) Get(index int) (*T, error) {
 	walk := l.head
 	for i := 0; i < index; i++ {
 		if walk.next == nil {
-			return nil, errors.NewIndexOutOfBounds(index, i)
+			return nil, errors.IndexOutOfBounds{Index: index, Bounds: i}
 		}
 		walk = walk.next
 	}
@@ -157,7 +157,7 @@ func (l *List[T]) Set(index int, item T) error {
 	walk := l.head
 	for i := 0; i < index; i++ {
 		if walk.next == nil {
-			return errors.NewIndexOutOfBounds(index, i)
+			return errors.IndexOutOfBounds{Index: index, Bounds: i}
 		}
 		walk = walk.next
 	}
