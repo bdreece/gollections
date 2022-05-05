@@ -10,7 +10,7 @@ type Iterator[T any] interface {
 }
 
 type Reverse[T any] interface {
-    Prev() (*T, error)
+	Prev() (*T, error)
 }
 
 // Any returns true if for any item in the iterator,
@@ -135,7 +135,7 @@ func Map[T, U any](iter Iterator[T], coll Collection[U], pred func(*T) U) (Itera
 		if err != nil {
 			return coll.Iterator(), err
 		}
-		coll.Collect((pred)(item))
+		coll.Append((pred)(item))
 	}
 	return coll.Iterator(), nil
 }
