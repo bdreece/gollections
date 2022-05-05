@@ -58,7 +58,7 @@ func (v *Vector[T]) PopFront() (*T, error) {
 	if n > 0 {
 		*v = []T(*v)[1:]
 	} else {
-		v = New[T]()
+		*v = *New[T]()
 	}
 	return val, nil
 }
@@ -77,7 +77,7 @@ func (v *Vector[T]) PopBack() (*T, error) {
 		*v = []T(*v)[:n-1]
 	} else {
 		*val = []T(*v)[0]
-		v = New[T]()
+		*v = *New[T]()
 	}
 	return val, nil
 }
@@ -154,11 +154,11 @@ func (v *Vector[T]) InsertBefore(i int, value T) error {
 // space in the vector for more elements. The
 // values at these indices are zero-initialized.
 func (v *Vector[T]) Reserve(additional int) {
-    oldVec := []T(*v)
-    *v = make(Vector[T], len(oldVec) + additional)
-    for i, item := range oldVec {
-        []T(*v)[i] = item
-    }
+	oldVec := []T(*v)
+	*v = make(Vector[T], len(oldVec)+additional)
+	for i, item := range oldVec {
+		[]T(*v)[i] = item
+	}
 }
 
 // Collect inserts a variable number of items
