@@ -218,6 +218,20 @@ func TestReserve(t *testing.T) {
 
 }
 
+// TestExtend asserts that the Extend function
+// properly appends all the values from another
+// collection into the vector.
+func TestExtend(t *testing.T) {
+	vec1, numbers := setup()
+	vec2, _ := setup()
+	vec1.Extend(vec2)
+	for i, number := range *vec1 {
+		if number != numbers[i%len(numbers)] {
+			t.Errorf(EXPECTED, "val", numbers[i%len(numbers)], number)
+		}
+	}
+}
+
 // TestClear asserts that the Clear function
 // properly sets every element to the zero
 // value of its type.
