@@ -150,6 +150,17 @@ func (v *Vector[T]) InsertBefore(i int, value T) error {
 	return nil
 }
 
+// Reserve allocates an additional amount of
+// space in the vector for more elements. The
+// values at these indices are zero-initialized.
+func (v *Vector[T]) Reserve(additional int) {
+    oldVec := []T(*v)
+    *v = make(Vector[T], len(oldVec) + additional)
+    for i, item := range oldVec {
+        []T(*v)[i] = item
+    }
+}
+
 // Collect inserts a variable number of items
 // into the Vector. This method implements part
 // of the Iterator interface.
