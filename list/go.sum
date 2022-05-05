@@ -1,2 +1,4 @@
 github.com/bdreece/gollections/errors v0.0.0-20220428193851-d01ded229891 h1:lL5tbNHkJZRq/6evT4amw4KKg+RGYtvYGvCpZc4QaVQ=
 github.com/bdreece/gollections/errors v0.0.0-20220428193851-d01ded229891/go.mod h1:VkiDOkAt9c0c+WJuaOoJED/UYJ5xWBbeE+6mW4PX/9o=
+github.com/bdreece/gollections/errors v0.0.0-20220505195102-74dcee013af7 h1:3rWJfTNX2Sd1Aw8qm2xiSgXV1Dg/VzdEwlNkQFdg0a4=
+github.com/bdreece/gollections/errors v0.0.0-20220505195102-74dcee013af7/go.mod h1:VkiDOkAt9c0c+WJuaOoJED/UYJ5xWBbeE+6mW4PX/9o=
