@@ -197,6 +197,27 @@ func TestSet(t *testing.T) {
 	}
 }
 
+// TestReserve asserts that the Reserve
+// function properly allocates additional
+// space in the vector.
+func TestReserve(t *testing.T) {
+	vec, _ := setup()
+	vec.Reserve(5)
+	if len(*vec) != 10 {
+		t.Errorf(EXPECTED, "len", 10, len(*vec))
+	}
+
+	for i, number := range *vec {
+		if i < 5 {
+			continue
+		}
+		if number != 0 {
+			t.Errorf(EXPECTED, "val", 0, number)
+		}
+	}
+
+}
+
 // TestClear asserts that the Clear function
 // properly sets every element to the zero
 // value of its type.
