@@ -25,3 +25,14 @@ type Empty struct{}
 // Error returns a message representing the
 // Empty error.
 func (e Empty) Error() string { return "collection is empty" }
+
+// NotFound represents an error when
+// the specified key cannot be found
+type NotFound[K any] struct { Key K }
+
+// Error returns a message representing the
+// key not found error.
+func (n NotFound[K]) Error() string { 
+    return fmt.Sprintf("key not found: %v\n", n.Key)
+}
+
