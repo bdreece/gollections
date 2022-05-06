@@ -1,0 +1,4 @@
+github.com/bdreece/gollections/errors v0.0.0-20220505195102-74dcee013af7 h1:3rWJfTNX2Sd1Aw8qm2xiSgXV1Dg/VzdEwlNkQFdg0a4=
+github.com/bdreece/gollections/iterator v0.0.0-20220506003059-c0f192a6651e h1:LCVlgaEEDuK5k6GyJaIoyY6OIcUgIGsOjRRRBk3QaLw=
+github.com/bdreece/gollections/iterator v0.0.0-20220506003059-c0f192a6651e/go.mod h1:xj1mqkCV4GLfj3Dsl7z9lXdIGvCY30lhi6YNackYNYc=
+github.com/bdreece/gollections/list v0.0.0-20220505195102-74dcee013af7 h1:5SPgQBuI9ZZXJaE8WtT+TA8kkP9CTyIojoTaNNq/bgI=
