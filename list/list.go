@@ -3,7 +3,10 @@
 
 package list
 
-import "github.com/bdreece/gollections/errors"
+import (
+	"github.com/bdreece/gollections/errors"
+	"github.com/bdreece/gollections/iterator"
+)
 
 type node[T any] struct {
 	value T
@@ -73,8 +76,12 @@ func (l *List[T]) PushBack(item T) {
 // PushFront pushes an item onto the front
 // of the double-linked list.
 func (l *List[T]) PushFront(item T) {
-	l.head = newNode(item, l.head, nil)
-	l.head.next.prev = l.head
+	newHead := newNode(item, l.head, nil)
+	if l.head != nil {
+		newHead.next = l.head
+		l.head.prev = newHead
+	}
+	l.head = newHead
 	l.length += 1
 }
 
@@ -106,12 +113,12 @@ func (l *List[T]) PopBack() (*T, error) {
 		walk = walk.next
 	}
 
-	value := new(T)
-	*value = walk.value
-	walk.prev.next = nil
-	walk.prev = nil
+	if walk.prev != nil {
+		walk.prev.next = nil
+		walk.prev = nil
+	}
 	l.length -= 1
-	return value, nil
+	return &walk.value, nil
 }
 
 // Get returns a pointer to an item in the
@@ -131,14 +138,7 @@ func (l *List[T]) Get(index int) (*T, error) {
 		walk = walk.next
 	}
 
-	val := &walk.value
-	walk.prev.next = nil
-	walk.prev = nil
-	if walk.next != nil {
-		walk.next.prev = nil
-		walk.next = nil
-	}
-	return val, nil
+	return &walk.value, nil
 }
 
 // Set sets the item located at index in
@@ -164,4 +164,35 @@ func (l *List[T]) Set(index int, item T) error {
 
 	walk.value = item
 	return nil
+}
+
+// Collect collects items from an iterator into the list.
+func (l *List[T]) Collect(iter iterator.Iterator[T]) error {
+	if err := iterator.ForEach(iter, func(item *T) {
+		l.PushBack(*item)
+	}); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Append appends a variable number of items to the list.
+func (l *List[T]) Append(items ...T) {
+	for _, item := range items {
+		l.PushBack(item)
+	}
+}
+
+func (l *List[T]) Extend(coll iterator.Collection[T]) error {
+	if err := iterator.ForEach(coll.Iterator(), func(item *T) {
+		l.PushBack(*item)
+	}); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Iterator returns an iterator over the items in the list.
+func (l *List[T]) Iterator() iterator.Iterator[T] {
+	return &Iterator[T]{l.head}
 }
