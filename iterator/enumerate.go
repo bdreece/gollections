@@ -19,8 +19,8 @@ func (e EnumerateError) Error() string {
 
 // EnumerateItem is the item over which an Enumerate iterates.
 type EnumerateItem[T any] struct {
-	item  T
-	index int
+	Item  T
+	Index int
 }
 
 // Enumerate is an iterator that provides the index of the current
