@@ -3,7 +3,11 @@
 
 package iterator
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/bdreece/gollections/errors"
+)
 
 // ZipError combines errors from both zipped iterators.
 type ZipError struct {
@@ -45,18 +49,22 @@ func NewZip[T any, U any](a Iterator[T], b Iterator[U]) *Zip[T, U] {
 // Next returns the next items from the zipped iterators.
 // This method implements the Iterator interface. Returns
 // item, ZipError on collection error.
-func (z *Zip[T, U]) Next() (ZipItem[T, U], error) {
+func (z *Zip[T, U]) Next() (*ZipItem[T, U], error) {
 	a, err_a := z.a.Next()
 	b, err_b := z.b.Next()
+
+	if a == nil || b == nil {
+		return nil, errors.Empty{}
+	}
 
 	item := ZipItem[T, U]{a, b}
 
 	if err_a != nil || err_b != nil {
-		return item, ZipError{
+		return &item, ZipError{
 			a: err_a,
 			b: err_b,
 		}
 	} else {
-		return item, nil
+		return &item, nil
 	}
 }

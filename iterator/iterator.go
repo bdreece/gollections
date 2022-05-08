@@ -126,16 +126,16 @@ func Fold[T any, U any](iter Iterator[T], init *U, fn func(*U, T)) (*U, error) {
 // Map transforms an iterator over one type into an iterator
 // over another type, converting each item via pred. Returns
 // Iterator[U], error on collection error.
-func Map[T, U any](iter Iterator[T], coll Collection[U], pred func(*T) U) (Iterator[U], error) {
+func Map[T, U any](iter Iterator[T], coll Iterable[U], pred func(*T) U) (Iterator[U], error) {
 	for {
 		item, err := iter.Next()
 		if item == nil {
 			break
 		}
 		if err != nil {
-			return coll.Iterator(), err
+			return coll.IntoIterator(), err
 		}
 		coll.Append((pred)(item))
 	}
-	return coll.Iterator(), nil
+	return coll.IntoIterator(), nil
 }

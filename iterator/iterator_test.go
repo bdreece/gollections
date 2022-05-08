@@ -8,13 +8,41 @@ import (
 	"testing"
 
 	"github.com/bdreece/gollections/errors"
-	"github.com/bdreece/gollections/list"
 )
 
 const (
 	EXPECTED string = "expected %s: (%d), got (%d)\n"
 	ERROR    string = "experienced error: \"%s\"\n"
 )
+
+// Slice provides a test collection for iteration
+// (need to do this to prevent import loops).
+type Slice[T any] []T
+
+// IntoIterator implements the IntoIterator interface.
+func (s *Slice[T]) IntoIterator() Iterator[T] {
+	return NewSliceIter(*s...)
+}
+
+// FromIterator implements the FromIterator interface.
+func (s *Slice[T]) FromIterator(iter Iterator[T]) error {
+	for {
+		elem, err := iter.Next()
+		if elem == nil {
+			break
+		}
+		if err != nil {
+			return err
+		}
+		*s = append([]T(*s), *elem)
+	}
+	return nil
+}
+
+func (s *Slice[T]) Append(elem T) error {
+	*s = append([]T(*s), elem)
+	return nil
+}
 
 // SliceIter provides a rudimentary iterator
 // for testing
@@ -133,17 +161,20 @@ func TestFold(t *testing.T) {
 
 func TestMap(t *testing.T) {
 	num_iter := NewSliceIter(1, 2, 3, 4, 5)
-	str_iter, err := Map(num_iter, list.List[string], func(item *int) string {
+	str_iter, err := Map[int, string](num_iter, new(Slice[string]), func(item *int) string {
 		return fmt.Sprint(*item)
 	})
 	if err != nil {
 		t.Errorf(ERROR, err.Error())
 	}
-	if err := ForEach[string](NewZip(num_iter, str_iter), func(item *ZipItem[int, string]) {
-		if fmt.Sprint(item.A) != *item.B {
-			t.Errorf(EXPECTED, "val", item.A, item.A)
-		}
-	}); err != nil {
+	if err := ForEach[ZipItem[int, string]](
+		NewZip[int](num_iter, str_iter),
+		func(item *ZipItem[int, string]) {
+			if fmt.Sprint(item.A) != *item.B {
+				t.Errorf(EXPECTED, "val", item.A, item.A)
+			}
+		},
+	); err != nil {
 		t.Errorf(ERROR, err.Error())
 	}
 }
