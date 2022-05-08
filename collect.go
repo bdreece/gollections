@@ -3,6 +3,6 @@
 
 package gollections
 
-type Append[T any] interface {
-    Append(T)
+type Collect[T any] interface {
+	Collect(...T)
 }
