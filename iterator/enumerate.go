@@ -44,8 +44,8 @@ func NewEnumerate[T any](iter Iterator[T]) *Enumerate[T] {
 func (e *Enumerate[T]) Next() (*EnumerateItem[T], error) {
 	item, err := e.iter.Next()
 	enum_item := EnumerateItem[T]{
-		item:  *item,
-		index: e.index,
+		Item:  *item,
+		Index: e.index,
 	}
 	e.index++
 	if err != nil {
