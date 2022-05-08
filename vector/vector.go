@@ -107,6 +107,30 @@ func (v *Vector[T]) Dequeue() (*T, error) {
 	return v.PopFront()
 }
 
+// Push inserts an element at the front of the
+// vector; simply an alias to PushFront. This
+// method implements part of the gollections.Stack
+// interface.
+func (v *Vector[T]) Push(elem T) {
+	v.PushFront(elem)
+}
+
+// Pop removes and returns an element from the
+// front of the vector; simply an alias to
+// PopFront. This method implements part of the
+// gollections.Stack interface.
+func (v *Vector[T]) Pop() (*T, error) {
+	return v.PopFront()
+}
+
+// Peek returns a pointer to the element at
+// the front of the vector; simply an alias
+// to Front. This method implements part of
+// the gollections.Stack interface.
+func (v Vector[T]) Peek() (*T, error) {
+	return v.Front()
+}
+
 // Get returns a pointer to the item at index i.
 // Returns nil, errors.IndexOutOfBounds if i < 0
 // or i > len(v). This method implements part of
@@ -176,9 +200,35 @@ func (v *Vector[T]) Del(i int) (*T, error) {
 	} else if n > 0 {
 		*v = []T(*v)[1:]
 	} else {
-		v = New[T]()
+		*v = *New[T]()
 	}
 	return &item, nil
+}
+
+// IntoIterator returns an iterator over the items
+// in the Vector. This method implements the
+// IntoIterator interface.
+func (v *Vector[T]) IntoIterator() iterator.Iterator[T] {
+	return &Iterator[T]{v, 0}
+}
+
+// FromIterator appends the vector with the contents
+// of an iterator. This method implements part of the
+// FromIterator interface.
+func (v *Vector[T]) FromIterator(iter iterator.Iterator[T]) error {
+	return iterator.ForEach(
+		iter,
+		func(item *T) {
+			v.PushBack(*item)
+		},
+	)
+}
+
+// Append appends the vector with a single item. This
+// method implements part of the gollections.Append
+// interface.
+func (v *Vector[T]) Append(elem T) {
+	v.PushBack(elem)
 }
 
 // Clear sets all items in the vector to
@@ -189,18 +239,6 @@ func (v *Vector[T]) Clear() {
 			[]T(*v)[i] = *new(T)
 		}
 	}
-}
-
-// Extend appends all the values from another collection
-// into the vector. This method implements the
-// gollections.Extend interface.
-func (v *Vector[T]) Extend(other iterator.Collection[T]) error {
-	if err := iterator.ForEach(other.Iterator(), func(item *T) {
-		v.PushBack(*item)
-	}); err != nil {
-		return err
-	}
-	return nil
 }
 
 // Reserve allocates an additional amount of
@@ -217,30 +255,4 @@ func (v *Vector[T]) Reserve(additional int) {
 // Truncate reconstructs an empty vector.
 func (v *Vector[T]) Truncate() {
 	*v = *new(Vector[T])
-}
-
-// IntoIterator returns an iterator over the items
-// in the Vector. This method implements the 
-// IntoIterator interface.
-func (v *Vector[T]) IntoIterator() iterator.Iterator[T] {
-	return &Iterator[T]{v, 0}
-}
-
-// FromIterator appends the vector with the contents
-// of an iterator. This method implements part of the
-// FromIterator interface.
-func (v *Vector[T]) FromIterator(iter iterator.Iterator[T]) error {
-    return iterator.ForEach(
-        iter, 
-        func(item *T) { 
-            v.PushBack(*item) 
-        },
-    )
-}
-
-// Append appends the vector with a single item. This
-// method implements part of the gollections.Append
-// interface.
-func (v *Vector[T]) Append(elem T) {
-    v.PushBack(elem)
 }
