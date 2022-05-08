@@ -3,13 +3,15 @@
 
 package iterator
 
+import "github.com/bdreece/gollections"
+
 type IntoIterator[T any] interface {
 	IntoIterator() Iterator[T]
 }
 
 type FromIterator[T any] interface {
+    gollections.Append[T]
 	FromIterator(Iterator[T]) error
-	Append(T) error
 }
 
 type Iterable[T any] interface {
