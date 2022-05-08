@@ -20,9 +20,13 @@
 // SOFTWARE.
 
 /*
-gollections provides common data structures for Go 1.18 programs
+gollections provides common data structures for Go 1.18 programs.
+
+The root gollections package provides interfaces for common collection
+use-cases (e.g. array, queue, stack, etc.) that concrete data structures
+in subpackages implement (e.g. vector, hashmap, etc.).
 
 The package is split into a number of subpackages, so you can choose
-which data structures to import individually.
+which concrete data structures to import individually.
 */
 package gollections
