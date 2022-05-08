@@ -18,7 +18,8 @@ func New[T any]() *Vector[T] {
 
 // Front returns a pointer to the first item
 // in the vector. Returns nil, errors.Empty if
-// the vector is empty.
+// the vector is empty. This method implements
+// part of the gollections.Deque interface.
 func (v Vector[T]) Front() (*T, error) {
 	if len(v) == 0 {
 		return nil, errors.Empty{}
@@ -28,7 +29,8 @@ func (v Vector[T]) Front() (*T, error) {
 
 // Back returns a pointer to the last item
 // in the vector. Returns nil, errors.Empty if
-// the vector is empty.
+// the vector is empty. This method implements
+// part of the gollections.Deque interface.
 func (v Vector[T]) Back() (*T, error) {
 	if len(v) == 0 {
 		return nil, errors.Empty{}
@@ -37,11 +39,15 @@ func (v Vector[T]) Back() (*T, error) {
 }
 
 // PushBack appends the Vector with an item.
+// This method implements part of the
+// gollections.Deque interface.
 func (v *Vector[T]) PushBack(item T) {
 	*v = append([]T(*v), item)
 }
 
 // PushFront prepends the Vector with an item.
+// This method implements part of the
+// gollections.Deque interface.
 func (v *Vector[T]) PushFront(item T) {
 	newVec := []T{item}
 	*v = append(newVec, []T(*v)...)
@@ -49,7 +55,8 @@ func (v *Vector[T]) PushFront(item T) {
 
 // PopFront removes and returns an item from the
 // front of the Vector. Returns nil, errors.Empty
-// if the Vector is empty.
+// if the Vector is empty. This method implements
+// part of the gollections.Deque interface.
 func (v *Vector[T]) PopFront() (*T, error) {
 	n := len(*v)
 	if n == 0 {
@@ -68,7 +75,8 @@ func (v *Vector[T]) PopFront() (*T, error) {
 
 // PopBack removes and returns an item from the
 // back of the Vector. Returns nil, errors.Empty
-// if the Vector is empty.
+// if the Vector is empty. This method implements
+// part of the gollections.Deque interface.
 func (v *Vector[T]) PopBack() (*T, error) {
 	n := len(*v)
 	if n == 0 {
@@ -85,8 +93,24 @@ func (v *Vector[T]) PopBack() (*T, error) {
 	return val, nil
 }
 
+// Enqueue appends an element to the back
+// of the vector. This method implements
+// the gollections.Queue interface.
+func (v *Vector[T]) Enqueue(elem T) {
+	v.PushBack(elem)
+}
+
+// Dequeue returns and removes an element
+// from the front of the vector. This method
+// implements the gollections.Queue interface.
+func (v *Vector[T]) Dequeue() (*T, error) {
+	return v.PopFront()
+}
+
 // Get returns a pointer to the item at index i.
-// Returns nil, errors.IndexOutOfBounds if i < 0 or i > len(v).
+// Returns nil, errors.IndexOutOfBounds if i < 0
+// or i > len(v). This method implements part of
+// the gollections.Array interface.
 func (v Vector[T]) Get(i int) (*T, error) {
 	n := len(v)
 	if i > n {
@@ -96,7 +120,9 @@ func (v Vector[T]) Get(i int) (*T, error) {
 }
 
 // Set sets the item at index i to value.
-// Returns errors.IndexOutOfBounds if i < 0 or i > len(v).
+// Returns errors.IndexOutOfBounds if i < 0
+// or i > len(v). This method implements part of
+// the gollections.Array interface
 func (v *Vector[T]) Set(i int, value T) error {
 	n := len(*v)
 	if i >= n {
@@ -106,33 +132,11 @@ func (v *Vector[T]) Set(i int, value T) error {
 	return nil
 }
 
-// Clear sets all items in the vector to
-// T's zero value.
-func (v *Vector[T]) Clear() {
-	if n := len(*v); n > 0 {
-		for i := 0; i < n; i++ {
-			[]T(*v)[i] = *new(T)
-		}
-	}
-}
-
-// InsertAfter inserts an item directly after index i.
-// Returns errors.IndexOutOfBounds if i < 0 or i > len(v).
-func (v *Vector[T]) InsertAfter(i int, item T) error {
-	n := len(*v)
-	if i >= n {
-		return errors.IndexOutOfBounds{Index: i, Bounds: n}
-	}
-	before := []T(*v)[:i+1]
-	after := []T(*v)[i+1:]
-	*v = append(before, item)
-	*v = append(*v, after...)
-	return nil
-}
-
-// InsertBefore inserts an item directly before index i.
-// Returns errors.IndexOutOfBounds if i < 0 or i > len(v).
-func (v *Vector[T]) InsertBefore(i int, value T) error {
+// Ins inserts an item directly at index i. Returns
+// errors.IndexOutOfBounds if i < 0 or i > len(v). This
+// method implements part of the gollections.Array
+// interface.
+func (v *Vector[T]) Ins(i int, value T) error {
 	var (
 		before []T
 		after  []T
@@ -153,6 +157,52 @@ func (v *Vector[T]) InsertBefore(i int, value T) error {
 	return nil
 }
 
+// Del removes and returns the element at
+// the specified index, returning
+// errors.IndexOutOfBounds if i < 0 or
+// i > len(v). This method implements part
+// of the gollections.Array interface.
+func (v *Vector[T]) Del(i int) (*T, error) {
+	n := len(*v)
+	if i >= n {
+		return nil, errors.IndexOutOfBounds{Index: i, Bounds: n}
+	}
+	item := []T(*v)[i]
+	if i > 0 {
+		before := []T(*v)[:i]
+		after := []T(*v)[i+1:]
+		*v = before
+		*v = append(*v, after...)
+	} else if n > 0 {
+		*v = []T(*v)[1:]
+	} else {
+		v = New[T]()
+	}
+	return &item, nil
+}
+
+// Clear sets all items in the vector to
+// T's zero value.
+func (v *Vector[T]) Clear() {
+	if n := len(*v); n > 0 {
+		for i := 0; i < n; i++ {
+			[]T(*v)[i] = *new(T)
+		}
+	}
+}
+
+// Extend appends all the values from another collection
+// into the vector. This method implements the
+// gollections.Extend interface.
+func (v *Vector[T]) Extend(other iterator.Collection[T]) error {
+	if err := iterator.ForEach(other.Iterator(), func(item *T) {
+		v.PushBack(*item)
+	}); err != nil {
+		return err
+	}
+	return nil
+}
+
 // Reserve allocates an additional amount of
 // space in the vector for more elements. The
 // values at these indices are zero-initialized.
@@ -164,34 +214,33 @@ func (v *Vector[T]) Reserve(additional int) {
 	}
 }
 
-// Extend appends all the values from another collection
-// into the vector.
-func (v *Vector[T]) Extend(other iterator.Collection[T]) error {
-	if err := iterator.ForEach(other.Iterator(), func(item *T) {
-		v.PushBack(*item)
-	}); err != nil {
-		return err
-	}
-	return nil
-}
-
 // Truncate reconstructs an empty vector.
 func (v *Vector[T]) Truncate() {
 	*v = *new(Vector[T])
 }
 
-// Collect inserts a variable number of items
-// into the Vector. This method implements part
-// of the Iterator interface.
-func (v *Vector[T]) Collect(items ...T) {
-	for _, value := range items {
-		v.PushBack(value)
-	}
+// IntoIterator returns an iterator over the items
+// in the Vector. This method implements the 
+// IntoIterator interface.
+func (v *Vector[T]) IntoIterator() iterator.Iterator[T] {
+	return &Iterator[T]{v, 0}
 }
 
-// Iterator returns an iterator over the items
-// in the Vector. This method implements part
-// of the Iterator interface.
-func (v *Vector[T]) Iterator() iterator.Iterator[T] {
-	return &Iterator[T]{v, 0}
+// FromIterator appends the vector with the contents
+// of an iterator. This method implements part of the
+// FromIterator interface.
+func (v *Vector[T]) FromIterator(iter iterator.Iterator[T]) error {
+    return iterator.ForEach(
+        iter, 
+        func(item *T) { 
+            v.PushBack(*item) 
+        },
+    )
+}
+
+// Append appends the vector with a single item. This
+// method implements part of the gollections.Append
+// interface.
+func (v *Vector[T]) Append(elem T) {
+    v.PushBack(elem)
 }
