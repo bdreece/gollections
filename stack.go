@@ -6,6 +6,8 @@ package gollections
 // Stack provides an interface for
 // stack-like collections (i.e. FILO).
 type Stack[T any] interface {
+	// Peek provides the Peek functionality
+	// to the Stack
 	Peek[T]
 
 	// Push inserts an element into

@@ -6,6 +6,8 @@ package gollections
 // Queue provides an interface for
 // queue-like (i.e. FIFO) collections.
 type Queue[T any] interface {
+	// Peek provides the Peek functionality
+	// to the Queue.
 	Peek[T]
 
 	// Enqueue appends an element to the
