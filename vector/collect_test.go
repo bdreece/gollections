@@ -2,7 +2,10 @@ package vector
 
 import "testing"
 
-func TestAppend(t *testing.T) {
+// TestCollect asserts that the Collect
+// function properly appends a variable
+// number of elements onto the vector.
+func TestCollect(t *testing.T) {
 	vec := New[int]()
 	_, numbers := setup()
 
@@ -13,7 +16,7 @@ func TestAppend(t *testing.T) {
 			t.Errorf(EXPECTED, "len", i, n)
 		}
 
-		vec.Append(number)
+		vec.Collect(number)
 		elem := []int(*vec)[n]
 		if elem != number {
 			t.Errorf(EXPECTED, "val", number, elem)
