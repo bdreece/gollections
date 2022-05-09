@@ -60,6 +60,9 @@ func TestReserve(t *testing.T) {
 
 }
 
+// TestTruncate asserts that the Truncate
+// function properly reconstructs a new,
+// empty vector.
 func TestTruncate(t *testing.T) {
 	vec, _ := setup()
 	vec.Truncate()
