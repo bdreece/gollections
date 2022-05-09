@@ -14,7 +14,7 @@ func setup() (*RingBuf[int], []int) {
 	buf := New[int](5)
 	numbers := []int{1, 2, 3, 4, 5}
 	for _, a := range numbers {
-		buf.Write(a)
+		buf.Enqueue(a)
 	}
 
 	return buf, numbers
@@ -47,43 +47,14 @@ func TestNew(t *testing.T) {
 	checkFields(t, ringbuf, 0, 5, 0, 0)
 }
 
-// TestWrite asserts that the Write function
-// properly writes an item into the RingBuf.
-func TestWrite(t *testing.T) {
-	ringbuf := New[int](5)
-	numbers := []int{1, 2, 3, 4, 5}
-
-	for i, number := range numbers {
-		checkFields(t, ringbuf, i, 5, 0, i)
-		ringbuf.Write(number)
-	}
-}
-
-// TestRead asserts that the Read function
-// properly reads an item from the RingBuf.
-func TestRead(t *testing.T) {
-	ringbuf, numbers := setup()
-
-	for i, number := range numbers {
-		checkFields(t, ringbuf, 5-i, 5, i, 0)
-		val, err := ringbuf.Read()
-		if err != nil {
-			t.Errorf(ERROR, err.Error())
-		}
-		if *val != number {
-			t.Errorf(EXPECTED, "val", number, *val)
-		}
-	}
-}
-
 // TestClear asserts that the Clear function
 // properly zeroes all items in the ring
 // buffer.
 func TestClear(t *testing.T) {
 	ringbuf, _ := setup()
 	ringbuf.Clear()
-	val, err := ringbuf.Read()
-	for ; val != nil; val, err = ringbuf.Read() {
+	val, err := ringbuf.Dequeue()
+	for ; val != nil; val, err = ringbuf.Dequeue() {
 		if err != nil {
 			t.Errorf(ERROR, err.Error())
 		}
