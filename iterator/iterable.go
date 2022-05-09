@@ -10,7 +10,7 @@ type IntoIterator[T any] interface {
 }
 
 type FromIterator[T any] interface {
-    gollections.Append[T]
+	gollections.Collect[T]
 	FromIterator(Iterator[T]) error
 }
 

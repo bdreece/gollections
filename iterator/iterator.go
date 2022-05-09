@@ -135,7 +135,7 @@ func Map[T, U any](iter Iterator[T], coll Iterable[U], pred func(*T) U) (Iterato
 		if err != nil {
 			return coll.IntoIterator(), err
 		}
-		coll.Append((pred)(item))
+		coll.Collect((pred)(item))
 	}
 	return coll.IntoIterator(), nil
 }
