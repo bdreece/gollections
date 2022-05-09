@@ -3,7 +3,11 @@
 
 package iterator
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/bdreece/gollections/errors"
+)
 
 // EnumerateError is the error type associated
 // with an Enumerate.
@@ -43,6 +47,10 @@ func NewEnumerate[T any](iter Iterator[T]) *Enumerate[T] {
 // implements the Iterator interface.
 func (e *Enumerate[T]) Next() (*EnumerateItem[T], error) {
 	item, err := e.iter.Next()
+	if item == nil {
+		return nil, errors.Empty{}
+	}
+
 	enum_item := EnumerateItem[T]{
 		Item:  *item,
 		Index: e.index,
