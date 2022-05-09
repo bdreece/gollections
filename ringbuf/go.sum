@@ -1,2 +1,8 @@
-github.com/bdreece/gollections/errors v0.0.0-20220429060028-8e11574e8c87 h1:XhrfPAE00PHQq9z+e44opyUIxmZKJDz7kLmErKNeG5o=
-github.com/bdreece/gollections/errors v0.0.0-20220429060028-8e11574e8c87/go.mod h1:VkiDOkAt9c0c+WJuaOoJED/UYJ5xWBbeE+6mW4PX/9o=
+github.com/bdreece/gollections v0.0.0-20220509031705-6b6c0a25e159 h1:wAn7tI3vsf8C0TGQQJ2RKjicbuiVZGB5H2j78AFKc3I=
+github.com/bdreece/gollections v0.0.0-20220509031705-6b6c0a25e159/go.mod h1:x7PiVH0YYvxXNNEQfvp272GfYTfjVqC71JtBlV90Gvg=
+github.com/bdreece/gollections v0.0.0-20220509204903-1d8c152bc19a h1:+kEqJUia56Vqu+4Kby+RnN6kMotXQbiuJWX082G6/VU=
+github.com/bdreece/gollections v0.0.0-20220509204903-1d8c152bc19a/go.mod h1:x7PiVH0YYvxXNNEQfvp272GfYTfjVqC71JtBlV90Gvg=
+github.com/bdreece/gollections/errors v0.0.0-20220509204903-1d8c152bc19a h1:TxBFGJQTYRpfHNihqUnsEGCPRVu0le1Y5IkL82ughNU=
+github.com/bdreece/gollections/errors v0.0.0-20220509204903-1d8c152bc19a/go.mod h1:VkiDOkAt9c0c+WJuaOoJED/UYJ5xWBbeE+6mW4PX/9o=
+github.com/bdreece/gollections/iterator v0.0.0-20220509204903-1d8c152bc19a h1:PodzXjy5Ln6z1NDzXBbJCvm2ed8hkpynnYuXrokiMkI=
+github.com/bdreece/gollections/iterator v0.0.0-20220509204903-1d8c152bc19a/go.mod h1:lRLcelNEVlUyt192sSYND26pRF9/f3+J5/mICFuvLsk=
