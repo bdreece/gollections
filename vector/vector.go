@@ -16,33 +16,42 @@ func New[T any]() *Vector[T] {
 	return new(Vector[T])
 }
 
-// Front returns a pointer to the first item
-// in the vector. Returns nil, errors.Empty if
-// the vector is empty. This method implements
-// part of the gollections.Deque interface.
-func (v Vector[T]) Front() (*T, error) {
-	if len(v) == 0 {
-		return nil, errors.Empty{}
-	}
-	return &[]T(v)[0], nil
-}
-
-// Back returns a pointer to the last item
-// in the vector. Returns nil, errors.Empty if
-// the vector is empty. This method implements
-// part of the gollections.Deque interface.
-func (v Vector[T]) Back() (*T, error) {
-	if len(v) == 0 {
-		return nil, errors.Empty{}
-	}
-	return &[]T(v)[len(v)-1], nil
-}
-
 // PushBack appends the Vector with an item.
 // This method implements part of the
 // gollections.Deque interface.
 func (v *Vector[T]) PushBack(item T) {
 	*v = append([]T(*v), item)
+}
+
+// PopBack removes and returns an item from the
+// back of the Vector. Returns nil, errors.Empty
+// if the Vector is empty. This method implements
+// part of the gollections.Deque interface.
+func (v *Vector[T]) PopBack() (*T, error) {
+	n := len(*v)
+	if n == 0 {
+		return nil, errors.IndexOutOfBounds{Index: 0, Bounds: 0}
+	}
+	val := new(T)
+	if n > 0 {
+		*val = []T(*v)[n-1]
+		*v = []T(*v)[:n-1]
+	} else {
+		*val = []T(*v)[0]
+		*v = *New[T]()
+	}
+	return val, nil
+}
+
+// PeekBack returns a pointer to the last item
+// in the vector. Returns nil, errors.Empty if
+// the vector is empty. This method implements
+// part of the gollections.Deque interface.
+func (v Vector[T]) PeekBack() (*T, error) {
+	if len(v) == 0 {
+		return nil, errors.Empty{}
+	}
+	return &[]T(v)[len(v)-1], nil
 }
 
 // PushFront prepends the Vector with an item.
@@ -73,24 +82,15 @@ func (v *Vector[T]) PopFront() (*T, error) {
 	return val, nil
 }
 
-// PopBack removes and returns an item from the
-// back of the Vector. Returns nil, errors.Empty
-// if the Vector is empty. This method implements
+// PeekFront returns a pointer to the first item
+// in the vector. Returns nil, errors.Empty if
+// the vector is empty. This method implements
 // part of the gollections.Deque interface.
-func (v *Vector[T]) PopBack() (*T, error) {
-	n := len(*v)
-	if n == 0 {
-		return nil, errors.IndexOutOfBounds{Index: 0, Bounds: 0}
+func (v Vector[T]) PeekFront() (*T, error) {
+	if len(v) == 0 {
+		return nil, errors.Empty{}
 	}
-	val := new(T)
-	if n > 0 {
-		*val = []T(*v)[n-1]
-		*v = []T(*v)[:n-1]
-	} else {
-		*val = []T(*v)[0]
-		*v = *New[T]()
-	}
-	return val, nil
+	return &[]T(v)[0], nil
 }
 
 // Enqueue appends an element to the back
@@ -128,7 +128,7 @@ func (v *Vector[T]) Pop() (*T, error) {
 // to Front. This method implements part of
 // the gollections.Stack interface.
 func (v Vector[T]) Peek() (*T, error) {
-	return v.Front()
+	return v.PeekFront()
 }
 
 // Get returns a pointer to the item at index i.
@@ -224,11 +224,13 @@ func (v *Vector[T]) FromIterator(iter iterator.Iterator[T]) error {
 	)
 }
 
-// Append appends the vector with a single item. This
-// method implements part of the gollections.Append
-// interface.
-func (v *Vector[T]) Append(elem T) {
-	v.PushBack(elem)
+// Collect appends the vector with a variable number
+// of items. This method implements the
+// gollections.Collect interface.
+func (v *Vector[T]) Collect(elems ...T) {
+	for _, elem := range elems {
+		v.PushBack(elem)
+	}
 }
 
 // Clear sets all items in the vector to
