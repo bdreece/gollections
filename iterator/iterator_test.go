@@ -39,9 +39,8 @@ func (s *Slice[T]) FromIterator(iter Iterator[T]) error {
 	return nil
 }
 
-func (s *Slice[T]) Append(elem T) error {
-	*s = append([]T(*s), elem)
-	return nil
+func (s *Slice[T]) Collect(elems ...T) {
+	*s = append([]T(*s), elems...)
 }
 
 // SliceIter provides a rudimentary iterator
