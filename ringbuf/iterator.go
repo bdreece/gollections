@@ -13,5 +13,5 @@ type Iterator[T any] struct {
 // Returns nil, errors.Empty after the last
 // item has been read.
 func (iter *Iterator[T]) Next() (*T, error) {
-	return iter.RingBuf.Read()
+	return iter.RingBuf.Dequeue()
 }

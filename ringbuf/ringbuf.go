@@ -3,7 +3,10 @@
 
 package ringbuf
 
-import "github.com/bdreece/gollections/errors"
+import (
+	"github.com/bdreece/gollections/errors"
+	"github.com/bdreece/gollections/iterator"
+)
 
 // RingBuf is the ring buffer data structure
 type RingBuf[T any] struct {
@@ -25,11 +28,11 @@ func New[T any](capacity int) *RingBuf[T] {
 	}
 }
 
-// Read reads an item from the RingBuf,
+// Dequeue reads an item from the RingBuf,
 // advancing the head pointer. Returns
 // nil, errors.Empty if ring buffer is
 // empty.
-func (b *RingBuf[T]) Read() (*T, error) {
+func (b *RingBuf[T]) Dequeue() (*T, error) {
 	if b.length <= 0 {
 		return nil, errors.Empty{}
 	}
@@ -56,9 +59,37 @@ func (b RingBuf[T]) Peek() (*T, error) {
 	return val, nil
 }
 
-// Write writes an item into the RingBuf,
+// Collect writes a variable number of items
+// into the RingBuf. This method implements
+// part of the Iterator interface.
+func (b *RingBuf[T]) Collect(values ...T) {
+	for _, value := range values {
+		b.Enqueue(value)
+	}
+}
+
+// IntoIterator returns an iterator over the items
+// in the RingBuf. This method implements part
+// of the Iterable interface.
+func (b *RingBuf[T]) IntoIterator() iterator.Iterator[T] {
+	return &Iterator[T]{b}
+}
+
+// FromIterator collects the elements from the iterator
+// into the ring buffer. This method implements part
+// of the Iterable interface.
+func (b *RingBuf[T]) FromIterator(iter iterator.Iterator[T]) error {
+	if err := iterator.ForEach(iter, func(item *T) {
+		b.Enqueue(*item)
+	}); err != nil {
+		return err
+	}
+	return nil
+}
+
+// Enqueue writes an item into the RingBuf,
 // advancing the tail pointer.
-func (b *RingBuf[T]) Write(item T) {
+func (b *RingBuf[T]) Enqueue(item T) {
 	b.data[b.tail] = item
 	b.tail = (b.tail + 1) % b.capacity
 	b.length += 1
@@ -68,20 +99,4 @@ func (b *RingBuf[T]) Write(item T) {
 // effectively zeroing all the items.
 func (b *RingBuf[T]) Clear() {
 	b.data = make([]T, b.capacity)
-}
-
-// Collect writes a variable number of items
-// into the RingBuf. This method implements
-// part of the Iterator interface.
-func (b *RingBuf[T]) Collect(values ...T) {
-	for _, value := range values {
-		b.Write(value)
-	}
-}
-
-// Iterator returns an iterator over the items
-// in the RingBuf. This method implements part
-// of the Iterator interface.
-func (b *RingBuf[T]) Iterator() *Iterator[T] {
-	return &Iterator[T]{b}
 }
