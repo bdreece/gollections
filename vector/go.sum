@@ -2,11 +2,17 @@ github.com/bdreece/gollections v0.0.0-20220509012537-e116b93d1a56 h1:XS4OETLVW92
 github.com/bdreece/gollections v0.0.0-20220509012537-e116b93d1a56/go.mod h1:x7PiVH0YYvxXNNEQfvp272GfYTfjVqC71JtBlV90Gvg=
 github.com/bdreece/gollections v0.0.0-20220509015231-6623ffd9c416 h1:FXQYN2IKWQ8wmy6IkBgd3ymX8fZlrFdlx+k+16znjws=
 github.com/bdreece/gollections v0.0.0-20220509015231-6623ffd9c416/go.mod h1:x7PiVH0YYvxXNNEQfvp272GfYTfjVqC71JtBlV90Gvg=
+github.com/bdreece/gollections v0.0.0-20220509031705-6b6c0a25e159 h1:wAn7tI3vsf8C0TGQQJ2RKjicbuiVZGB5H2j78AFKc3I=
+github.com/bdreece/gollections v0.0.0-20220509031705-6b6c0a25e159/go.mod h1:x7PiVH0YYvxXNNEQfvp272GfYTfjVqC71JtBlV90Gvg=
 github.com/bdreece/gollections/errors v0.0.0-20220509014027-d0eddcc76ef5 h1:5/yIDQarZHU4OGelrQyzAFtsBGGFRKB3v8kJOW52qaA=
 github.com/bdreece/gollections/errors v0.0.0-20220509014027-d0eddcc76ef5/go.mod h1:VkiDOkAt9c0c+WJuaOoJED/UYJ5xWBbeE+6mW4PX/9o=
 github.com/bdreece/gollections/errors v0.0.0-20220509015231-6623ffd9c416 h1:whzIlj8suuDSlVUGWlQKRwBLlkLgM1UYalxiPoFGhIU=
 github.com/bdreece/gollections/errors v0.0.0-20220509015231-6623ffd9c416/go.mod h1:VkiDOkAt9c0c+WJuaOoJED/UYJ5xWBbeE+6mW4PX/9o=
+github.com/bdreece/gollections/errors v0.0.0-20220509031705-6b6c0a25e159 h1:hMX6eKl18Znumws1ZdEvkX9/A7l9jfrXkjGrfnBzgxI=
+github.com/bdreece/gollections/errors v0.0.0-20220509031705-6b6c0a25e159/go.mod h1:VkiDOkAt9c0c+WJuaOoJED/UYJ5xWBbeE+6mW4PX/9o=
 github.com/bdreece/gollections/iterator v0.0.0-20220509011903-78b72a32b494 h1:as0KKqEffolkjwVFDGPef+OaK/Tve9WAIiugx02MOPM=
 github.com/bdreece/gollections/iterator v0.0.0-20220509011903-78b72a32b494/go.mod h1:UaBQBHimpTdLhpNzCl5IDtsjIDjHpEOk4hPYg6F2kQM=
 github.com/bdreece/gollections/iterator v0.0.0-20220509015231-6623ffd9c416 h1:8OoDzXqjoHozZYaYW+oxbxHIW/moJAc/ARmGJPWI2RI=
 github.com/bdreece/gollections/iterator v0.0.0-20220509015231-6623ffd9c416/go.mod h1:DzIvdJw1rtATgb79FMZUnM9CXVKuLHMPcvaG288KeWM=
+github.com/bdreece/gollections/iterator v0.0.0-20220509031705-6b6c0a25e159 h1:Q4XToYlAc6Lbh3uyMZYAXVt34i50qe9JLqnv2fP36Vs=
+github.com/bdreece/gollections/iterator v0.0.0-20220509031705-6b6c0a25e159/go.mod h1:DzIvdJw1rtATgb79FMZUnM9CXVKuLHMPcvaG288KeWM=
