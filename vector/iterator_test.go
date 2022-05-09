@@ -25,7 +25,7 @@ func TestForEach(t *testing.T) {
 func TestEnumerate(t *testing.T) {
 	vec, numbers := setup()
 	if err := iterator.ForEach[iterator.EnumerateItem[int]](
-		iterator.NewEnumerate[int](vec.IntoIterator()),
+		iterator.NewEnumerate(vec.IntoIterator()),
 		func(elem *iterator.EnumerateItem[int]) {
 			expected := numbers[elem.Index]
 			got := elem.Item
