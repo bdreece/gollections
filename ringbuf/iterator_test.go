@@ -21,3 +21,19 @@ func TestForEach(t *testing.T) {
 		t.Errorf(ERROR, err.Error())
 	}
 }
+
+func TestEnumerate(t *testing.T) {
+	ringbuf, numbers := setup()
+	if err := iterator.ForEach[iterator.EnumerateItem[int]](
+		iterator.NewEnumerate(ringbuf.IntoIterator()),
+		func(item *iterator.EnumerateItem[int]) {
+			got := item.Item
+			expected := numbers[item.Index]
+			if got != expected {
+				t.Errorf(EXPECTED, "val", expected, got)
+			}
+		},
+	); err != nil {
+		t.Errorf(ERROR, err.Error())
+	}
+}
