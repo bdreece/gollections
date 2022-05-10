@@ -2,6 +2,9 @@ package vector
 
 import "testing"
 
+// TestPush asserts that the Push
+// function properly prepends an
+// element onto the vector.
 func TestPush(t *testing.T) {
 	vec := New[int]()
 	_, numbers := setup()
@@ -15,6 +18,10 @@ func TestPush(t *testing.T) {
 	}
 }
 
+// TestPop asserts that the Pop
+// function properly removes and
+// returns the first element in
+// the vector.
 func TestPop(t *testing.T) {
 	vec, numbers := setup()
 
@@ -30,25 +37,6 @@ func TestPop(t *testing.T) {
 		}
 		if *elem != number {
 			t.Errorf(EXPECTED, "val", number, *elem)
-		}
-	}
-}
-
-func TestPeek(t *testing.T) {
-	vec, numbers := setup()
-
-	for range numbers {
-		n := len(*vec)
-		m := len(numbers)
-		if n != m {
-			t.Errorf(EXPECTED, "len", m, n)
-		}
-		elem, err := vec.Peek()
-		if err != nil {
-			t.Errorf(ERROR, err.Error())
-		}
-		if *elem != numbers[0] {
-			t.Errorf(EXPECTED, "val", numbers[0], *elem)
 		}
 	}
 }
