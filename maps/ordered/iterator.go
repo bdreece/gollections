@@ -16,7 +16,7 @@ func NewPairIterator[K comparable, V any](m *Map[K, V]) *Iterator[super.Pair[K, 
 	for key, val := range map[K]V(*m) {
 		vec.PushBack(super.Pair[K, V]{Key: key, Val: val})
 	}
-	return &Iterator[super.Pair[K, V]]{vec, 0}
+	return &Iterator[super.Pair[K, V]]{*vec, 0}
 }
 
 func (iter *Iterator[T]) Next() (*T, error) {

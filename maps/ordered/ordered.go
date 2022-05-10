@@ -84,7 +84,7 @@ func (m *Map[K, V]) Vals() iterator.Iterator[V] {
 	for _, val := range map[K]V(*m) {
 		vec.PushBack(val)
 	}
-	return &Iterator[V](*vec, 0)
+	return &Iterator[V]{*vec, 0}
 }
 
 // IntoIterator returns an iterator over the key-value
