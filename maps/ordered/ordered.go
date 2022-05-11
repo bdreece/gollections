@@ -87,8 +87,23 @@ func (m *Map[K, V]) Vals() iterator.Iterator[V] {
 	return &Iterator[V]{*vec, 0}
 }
 
+func (m *Map[K, V]) Collect(elems ...maps.Pair[K, V]) {
+	for _, elem := range elems {
+		m.Ins(elem.Key, elem.Val)
+	}
+}
+
 // IntoIterator returns an iterator over the key-value
 // pairs present in the ordered map.
 func (m *Map[K, V]) IntoIterator() iterator.Iterator[maps.Pair[K, V]] {
 	return NewPairIterator(m)
+}
+
+func (m *Map[K, V]) FromIterator(iter iterator.Iterator[maps.Pair[K, V]]) error {
+	if err := iterator.ForEach(iter, func(pair *maps.Pair[K, V]) {
+		m.Ins(pair.Key, pair.Val)
+	}); err != nil {
+		return err
+	}
+	return nil
 }
