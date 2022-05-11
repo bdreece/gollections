@@ -11,7 +11,7 @@ const (
 )
 
 func setup() (*HashMap[string, int], map[string]int) {
-	hashmap := New[string, int]()
+	hashmap := New[string, int](0.75, 5)
 	pairs := make(map[string]int, 5)
 	pairs["apple"] = 1
 	pairs["banana"] = 2
@@ -22,8 +22,8 @@ func setup() (*HashMap[string, int], map[string]int) {
 }
 
 func TestNew(t *testing.T) {
-	hashmap := New[string, int]()
-	if len(*hashmap.Vector) != 0 {
-		t.Errorf(EXPECTED, "len", 0, len(*hashmap.Vector))
+	hashmap := New[string, int](0.75, 5)
+	if len(*hashmap.Vector) != 5 {
+		t.Errorf(EXPECTED, "len", 5, len(*hashmap.Vector))
 	}
 }

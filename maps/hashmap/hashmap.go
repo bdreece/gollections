@@ -32,7 +32,7 @@ func New[K comparable, V any](loadFactor float32, capacity int) *HashMap[K, V] {
 	vec := vector.New[map[K]V]()
 	vec.Reserve(5)
 
-	iterator.ForEach(vec.Iterator(), func(bucket *map[K]V) {
+	iterator.ForEach(vec.IntoIterator(), func(bucket *map[K]V) {
 		*bucket = make(map[K]V)
 	})
 
@@ -60,7 +60,7 @@ func (m HashMap[K, V]) Get(key K) (*V, error) {
 	}
 	val, ok := (*bucket)[key]
 	if !ok {
-		return nil, errors.NotFound{}
+		return nil, errors.NotFound[K]{Key: key}
 	}
 	return &val, nil
 }
