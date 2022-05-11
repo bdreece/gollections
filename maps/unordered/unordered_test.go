@@ -1,4 +1,4 @@
-package ordered
+package unordered
 
 const (
 	ERROR    string = "experienced error: \"%s\"\n"

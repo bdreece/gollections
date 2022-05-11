@@ -1,4 +1,4 @@
-module github.com/bdreece/gollections/maps/ordered
+module github.com/bdreece/gollections/maps/unordered
 
 go 1.18
 
