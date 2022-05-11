@@ -13,61 +13,12 @@ type Reverse[T any] interface {
 	Prev() (*T, error)
 }
 
-// Any returns true if for any item in the iterator,
-// pred returns true. Returns false, error upon collection
-// error.
-func Any[T any](iter Iterator[T], pred func(*T) bool) (bool, error) {
-	for {
-		item, err := iter.Next()
-		if item == nil {
-			break
-		}
-		if err != nil {
-			return false, err
-		}
-		if (pred)(item) {
-			return true, nil
-		}
-	}
-	return false, nil
+type Fill[T any] interface {
+	Fill(int, T)
 }
 
-// All returns true if for all items in the iterator,
-// pred returns true. Returns false, error upon collection
-// error.
-func All[T any](iter Iterator[T], pred func(*T) bool) (bool, error) {
-	for {
-		item, err := iter.Next()
-		if item == nil {
-			break
-		}
-		if err != nil {
-			return true, err
-		}
-		if !(pred)(item) {
-			return false, nil
-		}
-	}
-	return true, nil
-}
-
-// None returns true if for all items in the iterator,
-// pred returns false. Returns false, error upon collection
-// error.
-func None[T any](iter Iterator[T], pred func(*T) bool) (bool, error) {
-	for {
-		item, err := iter.Next()
-		if item == nil {
-			break
-		}
-		if err != nil {
-			return true, err
-		}
-		if (pred)(item) {
-			return false, err
-		}
-	}
-	return true, nil
+type Generate[T any] interface {
+	Generate(int, func() T)
 }
 
 // ForEach calls fn with each item in the iterator.
@@ -121,21 +72,4 @@ func Fold[T any, U any](iter Iterator[T], init *U, fn func(*U, T)) (*U, error) {
 		(fn)(init, *item)
 	}
 	return init, nil
-}
-
-// Map transforms an iterator over one type into an iterator
-// over another type, converting each item via pred. Returns
-// Iterator[U], error on collection error.
-func Map[T, U any](iter Iterator[T], coll Iterable[U], pred func(*T) U) (Iterator[U], error) {
-	for {
-		item, err := iter.Next()
-		if item == nil {
-			break
-		}
-		if err != nil {
-			return coll.IntoIterator(), err
-		}
-		coll.Collect((pred)(item))
-	}
-	return coll.IntoIterator(), nil
 }
