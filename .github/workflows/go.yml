@@ -31,4 +31,4 @@ jobs:
       run: cd list; go test -v; cd ..
 
     - name: Test ordered.Map
-      run: cd maps/ordered; go tes t-v; cd ../..
+      run: cd maps/ordered; go test -v; cd ../..
