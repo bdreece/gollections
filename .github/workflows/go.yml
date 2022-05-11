@@ -30,5 +30,8 @@ jobs:
     - name: Test List
       run: cd list; go test -v; cd ..
 
+    - name: Test Iterator
+      run: cd iterator; go test -v; cd ..
+
     - name: Test ordered.Map
       run: cd maps/ordered; go test -v; cd ../..
