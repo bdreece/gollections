@@ -32,8 +32,8 @@ func TestGet(t *testing.T) {
 		if err != nil {
 			t.Errorf(ERROR, err.Error())
 		}
-		if *val != numbers[4-i] {
-			t.Errorf(EXPECTED, "val", numbers[4-i], *val)
+		if *val != numbers[i] {
+			t.Errorf(EXPECTED, "val", numbers[i], *val)
 		}
 	}
 

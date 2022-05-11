@@ -14,8 +14,8 @@ func TestPeekFront(t *testing.T) {
 	if err != nil {
 		t.Errorf(ERROR, err.Error())
 	}
-	if *val != 5 {
-		t.Errorf(EXPECTED, "val", 5, *val)
+	if *val != 1 {
+		t.Errorf(EXPECTED, "val", 1, *val)
 	}
 }
 
@@ -28,8 +28,8 @@ func TestPeekBack(t *testing.T) {
 	if err != nil {
 		t.Errorf(ERROR, err.Error())
 	}
-	if *val != 1 {
-		t.Errorf(EXPECTED, "val", 1, *val)
+	if *val != 5 {
+		t.Errorf(EXPECTED, "val", 5, *val)
 	}
 }
 
@@ -101,8 +101,8 @@ func TestPopBack(t *testing.T) {
 		if err != nil {
 			t.Errorf(ERROR, err.Error())
 		}
-		if *val != number {
-			t.Errorf(EXPECTED, "val", number, *val)
+		if *val != 6-number {
+			t.Errorf(EXPECTED, "val", 6-number, *val)
 		}
 	}
 }

@@ -14,7 +14,7 @@ func setup() (*List[int], []int) {
 	list := New[int]()
 	numbers := []int{1, 2, 3, 4, 5}
 	for _, number := range numbers {
-		list.PushFront(number)
+		list.PushBack(number)
 	}
 	return list, numbers
 }
