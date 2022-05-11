@@ -36,5 +36,5 @@ jobs:
     - name: Test unordered.Map
       run: cd maps/unordered; go test -v; cd ../..
 
-    - name: Test hashmap.Map
-      run: cd maps/hashmap; go test -v; cd ../..
+    - name: Test hash.Map
+      run: cd maps/hash; go test -v; cd ../..
