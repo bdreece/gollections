@@ -33,5 +33,8 @@ jobs:
     - name: Test Iterator
       run: cd iterator; go test -v; cd ..
 
-    - name: Test ordered.Map
-      run: cd maps/ordered; go test -v; cd ../..
+    - name: Test unordered.Map
+      run: cd maps/unordered; go test -v; cd ../..
+
+    - name: Test hashmap.Map
+      run: cd maps/hashmap; go test -v; cd ../..
