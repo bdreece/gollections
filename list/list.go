@@ -54,11 +54,17 @@ func (l *List[T]) PopBack() (*T, error) {
 	value := new(T)
 	*value = l.tail.value
 
-	// Recede tail
-	l.tail = l.tail.prev
+	if l.tail.prev != nil {
+		// Recede tail
+		l.tail = l.tail.prev
 
-	// Unlink removed tail
-	l.tail.next = nil
+		// Unlink removed tail
+		l.tail.next = nil
+	} else {
+		// Truncate list
+		l.head = nil
+		l.tail = nil
+	}
 
 	l.length -= 1
 	return value, nil
@@ -79,7 +85,7 @@ func (l *List[T]) PeekBack() (*T, error) {
 // of the double-linked list.
 func (l *List[T]) PushFront(item T) {
 	l.length += 1
-	if l.head != nil {
+	if l.head == nil {
 		l.head = newNode(item, nil, nil)
 		l.tail = l.head
 		return
@@ -99,10 +105,16 @@ func (l *List[T]) PopFront() (*T, error) {
 	value := new(T)
 	*value = l.head.value
 
-	// Advance head
-	l.head = l.head.next
-	// Unlink deleted head
-	l.head.prev = nil
+	if l.head.next != nil {
+		// Advance head
+		l.head = l.head.next
+		// Unlink deleted head
+		l.head.prev = nil
+	} else {
+		// Truncate list
+		l.head = nil
+		l.tail = nil
+	}
 
 	l.length -= 1
 	return value, nil
