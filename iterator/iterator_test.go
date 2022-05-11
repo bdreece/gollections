@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	EXPECTED string = "expected %s: (%d), got (%d)\n"
+	EXPECTED string = "expected %s: (%v), got (%v)\n"
 	ERROR    string = "experienced error: \"%s\"\n"
 )
 
@@ -159,18 +159,20 @@ func TestFold(t *testing.T) {
 }
 
 func TestMap(t *testing.T) {
-	num_iter := NewSliceIter(1, 2, 3, 4, 5)
-	str_iter, err := Map[int, string](num_iter, new(Slice[string]), func(item *int) string {
-		return fmt.Sprint(*item)
-	})
-	if err != nil {
-		t.Errorf(ERROR, err.Error())
-	}
+	numbers := Slice[int]{1, 2, 3, 4, 5}
 	if err := ForEach[ZipItem[int, string]](
-		NewZip[int](num_iter, str_iter),
+		NewZip[int, string](
+			numbers.IntoIterator(),
+			NewMap(
+				numbers.IntoIterator(),
+				func(item *int) string {
+					return fmt.Sprint(*item)
+				},
+			),
+		),
 		func(item *ZipItem[int, string]) {
-			if fmt.Sprint(item.A) != *item.B {
-				t.Errorf(EXPECTED, "val", item.A, item.A)
+			if fmt.Sprint(*item.A) != *item.B {
+				t.Errorf(EXPECTED, "val", *item.A, *item.B)
 			}
 		},
 	); err != nil {
