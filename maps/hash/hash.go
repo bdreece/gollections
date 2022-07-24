@@ -4,10 +4,10 @@
 package hash
 
 import (
+	"fmt"
 	"hash/maphash"
 
 	"github.com/bdreece/gollections/errors"
-	"github.com/bdreece/gollections/iterator"
 	"github.com/bdreece/gollections/maps"
 	"github.com/bdreece/gollections/vector"
 )
@@ -24,11 +24,10 @@ type Map[K comparable, V any] struct {
 // New constructs a new Map
 func New[K comparable, V any](loadFactor float32, capacity int) *Map[K, V] {
 	vec := vector.New[map[K]V]()
-	vec.Reserve(5)
 
-	iterator.ForEach(vec.IntoIterator(), func(bucket *map[K]V) {
-		*bucket = make(map[K]V)
-	})
+	for i := 0; i < capacity; i++ {
+		vec.Push(make(map[K]V))
+	}
 
 	return &Map[K, V]{
 		vec,
@@ -38,8 +37,8 @@ func New[K comparable, V any](loadFactor float32, capacity int) *Map[K, V] {
 }
 
 func (m *Map[K, V]) hash(key K) int {
-	bytes := any(key).([]byte)
-	m.Hash.Write(bytes)
+	keyString := fmt.Sprint(key)
+	m.Hash.WriteString(keyString)
 	return int(m.Hash.Sum64()) % len(*m.Vector)
 }
 
