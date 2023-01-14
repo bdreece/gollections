@@ -1,84 +1,135 @@
 # gollections
 
-[![MIT License](https://img.shields.io/github/license/bdreece/gollections)](https://github.com/bdreece/gollections/blob/main/LICENSE.md)
-[![GitHub Releases](https://img.shields.io/github/v/release/bdreece/gollections?include_prereleases)](https://github.com/bdreece/gollections/releases)
-[![Build Status](https://img.shields.io/github/workflow/status/bdreece/gollections/Go)](https://github.com/bdreece/gollections/actions/workflows/go.yml)
+[![Golang](https://img.shields.io/badge/-Go-00ADD8?logo=go&logoColor=white&style=for-the-badge)](https://go.dev/)
+[![MIT License](https://img.shields.io/github/license/bdreece/gollections?style=for-the-badge)](https://github.com/bdreece/gollections/blob/main/LICENSE.md)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/bdreece/gollections/go.yml?style=for-the-badge)](https://github.com/bdreece/gollections/actions/workflows/go.yml)
 
-# (WIP) WORK IN PROGRESS!
-
-Common data structures and interfaces, written in Go
+A collection of collections!
 
 ## Table of Contents
 
 - [Overview](#overview)
-    - [Common Interfaces](#common-interfaces)
-    - [Package Hierarchy](#package-hierarchy)
-- [Subpackages](#subpackages)
-    - [vector](#vector)
-    - [ringbuf](#ringbuf)
-    - [list](#list)
-    - [iterator](#iterator)
-    - [maps](#maps)
-    - [trees](#trees)
-    - [graphs](#graphs)
-    - [errors](#errors)
-- [API Reference](https://pkg.go.dev/github.com/bdreece/gollections)
-- [Future Plans](#future-plans)
+  - [Usage](#usage)
+  - [Go Type Interop](#go-type-interop)
+- [Packages](#packages)
+  - [`pkg/collection`](#collection)
+  - [`pkg/dll`](#dll)
+  - [`pkg/hashmap`](#hashmap)
+  - [`pkg/iterator`](#iterator)
+  - [`pkg/list`](#list)
+  - [`pkg/queue`](#queue)
+  - [`pkg/slice`](#slice)
+  - [`pkg/sll`](#sll)
+  - [`pkg/stack`](#stack)
 
 ## Overview
 
-`gollections` provides common data structures and interfaces for Go 1.18. The
-most common interfaces exist in the root `gollections` package, and more specific interfaces will be describes in subpackages.
+[gollections](#gollections) is a collection of generic data structures, written with Go 1.18.
+The purpose of this package is to provide a flexible system of generic collections and lazily-
+executed iterators for use in a variety of applications
 
-### Common Interfaces
+### Usage
 
-Common interfaces provided by `gollections` include:
+Each of the collections resides in its own module, located under the [`pkg/`](pkg/) directory.
+Currently, only the following concrete data structures are implemented:
 
-- Array : Array-like structures (i.e. indexable collection)
-- Stack : Stack operations (e.g. push, pop, peek)
-- Queue : Queue operations (e.g. enqueue, dequeue)
-- Deque : Double-ended queue operations (e.g. push back/front, pop back/front)
+- [`pkg/dll`](#dll): Doubly-linked list
+- [`pkg/hashmap`](#hashmap): A basic hash map
+- [`pkg/slice`](#slice): Go slice wrapper
+- [`pkg/sll`](#sll): Singly-linked list
 
-The root `gollections` package also provides the Collect interface, which is implemented by all collections.
+The remaining packages in this repository provide interfaces dedicated to more specific data structures (e.g. [`pkg/stack`](#stack), [`pkg/queue`](#queue), etc.), and iterators (see [`pkg/iterator`](#iterator))
 
-### Package Hierarchy
+### Go Type Interop
 
-The root `gollections` package only contains the interface that different concrete implementations adhere to. In order to instantiate a data structure, one must be selected from the subpackages under `github.com/bdreece/gollections/...`. Some subpackages (e.g. maps, trees, etc.) contain more specific interfaces as well as further nested subpackages. These follow the same structure as the root packages.
+Go slices are used as the underlying type for the [`pkg/slice`](#slice) collection, and can be
+coerced as follows:
 
-## Subpackages
+```go
+package main
 
-### vector
+import "github.com/bdreece/gollections/pkg/slice"
 
-The `vector` package provides the vector data structure: a dynamic array-like data structure stored in contiguous memory. Vector objects implement the Array, Queue, Deque, Stack, and Collect interfaces.
+func main() {
+    s := slice.From([]int{1, 2, 3})
 
-### ringbuf
+    /*
+        s.Get(2)
+        v := s.First()
+        ...
+    */
 
-The `ringbuf` package provides the ring buffer data structure: a queue-like data structure stored in fixed-size contiquous memory. Ring buffer objects implement the Queue and Collect interfaces.
+}
+```
 
-### list
+## Packages
 
-The `list` package provides the linked-list data structure: an array-like data structure with links to previous and next elements at each element. List objects implement the Array, Queue, Deque, Stack, and Collect interfaces
+### Collection
+
+The [`pkg/collection`](pkg/collection/) module provides the base interface for all
+collection interfaces in this repository. A `collection.Collection[TItem]` provides the
+following methods:
+
+- `Concat(iterator.IntoIterator[TItem]) Collection[TItem]`
+- `Collect(iterator.Iterator[TItem]) Collection[TItem]`
+- `Append(TItem) Collection[TItem]`
+- `Count() int`
+
+The `collection.Collection[TItem]` interface also implements the `iterator.IntoIterator[TItem]` interface.
+
+### dll
+
+The [`pkg/dll`](pkg/dll/) module provides the concrete implementation of a doubly-linked
+list. A `dll.DLL[TItem]` implements the following interfaces:
+
+- `stack.Stack[TItem]`
+- `queue.Queue[TItem]`
+- `collection.Collection[TItem]`
+- `iterator.IntoIterator[TItem]`
+
+### hashmap
+
+The [`pkg/hashmap`](pkg/hashmap/) module provides the concrete implementation of a hash map.
+A `hashmap.HashMap[TKey, TValue]` implements the following interfaces:
+
+- `collection.Collection[hashmap.Pair[TKey, TValue]]`
+- `iterator.IntoIterator[hashmap.Pair[TKey, TValue]]`
+
+A `hashmap.HashMap[TKey, TValue]` also provides the following methods:
+
+- `Get(TKey) (*TValue, error)`
+- `Set(TKey, TValue) error`
+- `Remove(TKey) (*TValue, error)`
 
 ### iterator
 
-The `iterator` package provides a number of interfaces related to iteration over collections. The primary interface, Iterator, may be utilized by iterator transformation functions, such as `ForEach`, `Filter`, `Map`, `Enumerate`, etc. Collections may be used to create Iterators, by implementing the Iterable interface (provides `IntoIterator()` and `FromIterator()`).
+The [`pkg/iterator`](pkg/iterator/) module provides iterator interfaces and related functions
+for lazily-iterating over collections. The following functions can be used to operate over an
+`iterator.Iterator[TItem]`:
 
-### maps
+- `Chain[TItem](iterator.Iterator[TItem], iterator.Iterator[TItem]) iterator.Iterator[TItem]`
+- `Empty[TItem]() iterator.Iterator[TItem]`
+- `Enumerate[TItem](iterator.Iterator[TItem], EnumerateFunc[TItem])`
+  - `type EnumerateFunc[TItem] func(TItem, int)`
+- `Filter[TItem](iterator.Iterator[TItem], FilterFunc[TItem])`
+  - `type FilterFunc[TItem] func(TItem) bool`
+- `Find[TItem](iterator.Iterator[TItem], FindFunc[TItem])`
+  - `type FindFunc[TItem] func(TItem) bool`
+- `FlatMap[TInput, TOutput](iterator.Iterator[TInput], FlatMapFunc[TInput, TOutput])`
+  - `type FlatMapFunc[TInput, TOutput] func(TInput) iterator.IntoIterator[TOutput]`
+- `ForEach[TItem](iterator.Iterator, ForEachFunc[TItem])`
+  - `type ForEachFunc[TItem] func(TItem)`
+- `Map[TInput, TOutput](iterator.Iterator[TInput], MapFunc[TInput, TOutput])`
+  - `type MapFunc[TInput, TOutput] func(TInput) TOutput`
+- `Reduce[TItem, TAggregate](iterator.Iterator[TItem], ReduceFunc[TItem, TAggregate], TAggregate)`
+  - `type ReduceFunc[TItem, TAggregate] func(TAggregate, TItem) TAggregate`
+- `Take[TItem](iterator.Iterator[TItem], int) iterator.Iterator[TItem]`
 
-The `maps` package provides the generic Map interface, as well as some concrete implementors of this interface. Maps extend the Array and Collect interfaces with more specific functionality.
+The [`pkg/iterator`](pkg/iterator/) module also provides the `iterator.IntoIterator[TItem]`
+interface implemented by all collections, which provides the following method:
 
-### trees
+- `Iter[TItem]() iterator.Iterator[TItem]`
 
-The `trees` package provides the generic Tree, Node, and Leaf interfaces, as well as some concrete implementors of this interface. Trees are only guaranteed to implement the Collect interface, but concrete trees may implement Array or Map as well.
+### list
 
-### graphs
-
-The `graphs` package provides the generic Graph, Vertex, and Edge interfaces, as well as some concrete implementors of this interface. Graphs are only guaranteed to implement the Collect interface, but concrete graphs may implement other interfaces as well.
-
-### errors
-
-The `errors` package provides a number of common data structure operation errors, such as "Index out of bounds", or "Empty".
-
-## Future Plans
-
-I need to write more tests, and expand the different interfaces and data structures.
+The [`pkg/list`](pkg/list) module provides the `list.List[TItem]` interface, which represents a basic enumerable list.

@@ -1,6 +1,6 @@
 package iterator
 
-type FlatMapFunc[TInput, TOutput any] func(TInput) IntoIterator[TOutput]
+type FlatMapFunc[TInput, TOutput any] MapFunc[TInput, IntoIterator[TOutput]]
 
 func FlatMap[TInput, TOutput any](
 	iter Iterator[TInput],
