@@ -128,6 +128,7 @@ func (h *hashMap[TKey, TValue]) Remove(key TKey) (*TValue, error) {
 }
 
 func (h *hashMap[TKey, TValue]) hash(key TKey) int {
-	hash := maphash.String(h.seed, fmt.Sprint(key))
-	return h.capacity % int(hash)
+	var hash maphash.Hash
+	hash.WriteString(fmt.Sprint(key))
+	return h.capacity % int(hash.Sum64())
 }
