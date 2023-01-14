@@ -2,39 +2,23 @@ name: Go
 
 on:
   push:
-    branches: [ main ]
+    branches: [main, development]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.18
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
 
-    - name: Build
-      run: go build -v ./...
+      - name: Build
+        run: go build -v ./...
 
-    - name: Test Vector
-      run: cd vector; go test -v; cd ..
-
-    - name: Test RingBuf
-      run: cd ringbuf; go test -v; cd ..
-
-    - name: Test List
-      run: cd list; go test -v; cd ..
-
-    - name: Test Iterator
-      run: cd iterator; go test -v; cd ..
-
-    - name: Test unordered.Map
-      run: cd maps/unordered; go test -v; cd ../..
-
-    - name: Test hash.Map
-      run: cd maps/hash; go test -v; cd ../..
+      - name: Test
+        run: go test -v ./...
