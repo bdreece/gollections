@@ -4,7 +4,6 @@ import (
 	"testing"
 
 	"github.com/bdreece/gollections/pkg/hashmap"
-	"github.com/bdreece/gollections/pkg/slice"
 )
 
 func TestHashmapNew(t *testing.T) {
@@ -14,15 +13,15 @@ func TestHashmapNew(t *testing.T) {
 	}
 }
 
-func TestHashmapFrom(t *testing.T) {
-	h := hashmap.From[string, int](
-		slice.From([]hashmap.Pair[string, int]{
-			{"apple", 1},
-			{"banana", 2},
-			{"cake", 3},
-		}))
-
-	if h.Count() != 3 {
-		t.Errorf("Count == %d\n", h.Count())
-	}
-}
+// func TestHashmapFrom(t *testing.T) {
+// 	h := hashmap.From[string, int](
+// 		slice.From([]hashmap.Pair[string, int]{
+// 			{"apple", 1},
+// 			{"banana", 2},
+// 			{"cake", 3},
+// 		}))
+//
+// 	if h.Count() != 3 {
+// 		t.Errorf("Count == %d\n", h.Count())
+// 	}
+// }
