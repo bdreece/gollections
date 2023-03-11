@@ -15,7 +15,7 @@ func TestDLLNew(t *testing.T) {
 }
 
 func TestDLLFrom(t *testing.T) {
-	d := dll.From[int](slice.From([]int{1, 2, 3}))
+	d := dll.From[int](slice.Marshal([]int{1, 2, 3}))
 	if d.Count() != 3 {
 		t.Error("Count != 0")
 	}

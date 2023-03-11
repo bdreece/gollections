@@ -8,7 +8,7 @@ import (
 )
 
 func TestSllIterator(t *testing.T) {
-	s1 := sll.From[int](slice.From([]int{1, 2, 3}))
+	s1 := sll.From[int](slice.Marshal([]int{1, 2, 3}))
 	s2 := sll.New[int]()
 	v := s2.Concat(s1).
 		Iter().

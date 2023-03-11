@@ -9,7 +9,7 @@ import (
 
 func setup() Dict[string, int] {
 	return From[string, int](
-		slice.From([]Pair[string, int]{
+		slice.Marshal([]Pair[string, int]{
 			{"apple", 1},
 			{"banana", 2},
 		}))
@@ -70,7 +70,7 @@ func TestDictRemove(t *testing.T) {
 }
 
 func TestDictIter(t *testing.T) {
-	s := slice.From([]Pair[string, int]{
+	s := slice.Marshal([]Pair[string, int]{
 		{"cat", 3},
 		{"dog", 4},
 	})

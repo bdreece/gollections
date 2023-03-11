@@ -51,7 +51,7 @@ package main
 import "github.com/bdreece/gollections/pkg/slice"
 
 func main() {
-    s := slice.From([]int{1, 2, 3})
+    s := slice.Marshal([]int{1, 2, 3})
 
     /*
         s.Get(2)

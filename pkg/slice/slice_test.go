@@ -17,7 +17,7 @@ func TestNewSlice(t *testing.T) {
 }
 
 func TestFromSlice(t *testing.T) {
-	s := slice.From([]int{1, 2, 3})
+	s := slice.Marshal([]int{1, 2, 3})
 
 	if s.Count() != 3 {
 		t.Error("Count != 3")
@@ -68,7 +68,7 @@ func TestSliceAppend(t *testing.T) {
 
 func TestSliceConcat(t *testing.T) {
 	s := slice.New[int](0, 0)
-	v := s.Concat(slice.From([]int{1, 2, 3})).
+	v := s.Concat(slice.Marshal([]int{1, 2, 3})).
 		Iter().
 		Next()
 
@@ -85,7 +85,7 @@ func TestSliceCollect(t *testing.T) {
 	s := slice.New[string](0, 0)
 	v := s.Collect(
 		iterator.Map(
-			slice.From([]int{1, 2, 3}).Iter(),
+			slice.Marshal([]int{1, 2, 3}).Iter(),
 			func(item int) string {
 				return fmt.Sprint(item)
 			},
@@ -103,7 +103,7 @@ func TestSliceCollect(t *testing.T) {
 }
 
 func TestSliceAdd(t *testing.T) {
-	s := slice.From([]int{1, 2, 3})
+	s := slice.Marshal([]int{1, 2, 3})
 	s.Add(4)
 
 	if s.Count() != 4 {
@@ -117,7 +117,7 @@ func TestSliceAdd(t *testing.T) {
 }
 
 func TestSliceGet(t *testing.T) {
-	s := slice.From([]int{1, 2, 3})
+	s := slice.Marshal([]int{1, 2, 3})
 
 	v, err := s.Get(0)
 
@@ -136,7 +136,7 @@ func TestSliceGet(t *testing.T) {
 }
 
 func TestSliceBadGet(t *testing.T) {
-	s := slice.From([]int{1, 2, 3})
+	s := slice.Marshal([]int{1, 2, 3})
 	v, err := s.Get(4)
 	if err == nil {
 		t.Error("err is nil")
@@ -148,7 +148,7 @@ func TestSliceBadGet(t *testing.T) {
 }
 
 func TestSliceSet(t *testing.T) {
-	s := slice.From([]int{1, 2, 3})
+	s := slice.Marshal([]int{1, 2, 3})
 	err := s.Set(1, 3)
 	if err != nil {
 		t.Error(err)
@@ -174,7 +174,7 @@ func TestSliceSet(t *testing.T) {
 }
 
 func TestSliceBadSet(t *testing.T) {
-	s := slice.From([]int{1, 2, 3})
+	s := slice.Marshal([]int{1, 2, 3})
 	err := s.Set(4, 5)
 	if err == nil {
 		t.Error("err is nil")
@@ -182,7 +182,7 @@ func TestSliceBadSet(t *testing.T) {
 }
 
 func TestSliceRemove(t *testing.T) {
-	s := slice.From([]int{1, 2, 3})
+	s := slice.Marshal([]int{1, 2, 3})
 
 	v, err := s.Remove(1)
 	if err != nil {
@@ -204,7 +204,7 @@ func TestSliceRemove(t *testing.T) {
 }
 
 func TestSliceBadRemove(t *testing.T) {
-	s := slice.From([]int{1, 2, 3})
+	s := slice.Marshal([]int{1, 2, 3})
 	v, err := s.Remove(4)
 	if err == nil {
 		t.Error("err is nil")

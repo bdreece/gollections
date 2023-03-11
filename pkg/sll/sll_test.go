@@ -15,7 +15,7 @@ func TestSllNew(t *testing.T) {
 }
 
 func TestSLLFrom(t *testing.T) {
-	s := sll.From[int](slice.From([]int{1, 2, 3}))
+	s := sll.From[int](slice.Marshal([]int{1, 2, 3}))
 	if s.Count() != 3 {
 		t.Error("Count != 0")
 	}
@@ -56,7 +56,7 @@ func TestSLLPush(t *testing.T) {
 }
 
 func TestSLLPop(t *testing.T) {
-	s := sll.From[int](slice.From([]int{1, 2, 3}))
+	s := sll.From[int](slice.Marshal([]int{1, 2, 3}))
 	v := s.Pop()
 	if s.Count() != 2 {
 		t.Error("Count != 2")

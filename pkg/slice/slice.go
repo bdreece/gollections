@@ -55,9 +55,15 @@ func New[TItem any](size, capacity int) Slice[TItem] {
 }
 
 // From returns a Slice by casting a Go slice
-func From[TItem any](s []TItem) Slice[TItem] {
+func Marshal[TItem any](s []TItem) Slice[TItem] {
 	var _s slice[TItem] = s
 	return &_s
+}
+
+func From[TItem any](c collection.Collection[TItem]) Slice[TItem] {
+	s := New[TItem](0, 0)
+	s.Concat(c)
+	return s
 }
 
 func (s *slice[TItem]) First() *TItem {

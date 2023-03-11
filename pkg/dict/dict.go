@@ -40,6 +40,13 @@ func New[TKey comparable, TValue any]() Dict[TKey, TValue] {
 	return &d
 }
 
+func Marshal[TKey comparable, TValue any](
+	m map[TKey]TValue,
+) Dict[TKey, TValue] {
+	var d dict[TKey, TValue] = m
+	return &d
+}
+
 // From creates a new Dict by concatenating the items
 // of the given collection
 func From[TKey comparable, TValue any](

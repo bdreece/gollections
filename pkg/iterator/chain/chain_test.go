@@ -10,7 +10,7 @@ import (
 )
 
 func TestChainOne(t *testing.T) {
-	iter := slice.From([]int{11, 22, 33, 44, 55}).Iter()
+	iter := slice.Marshal([]int{11, 22, 33, 44, 55}).Iter()
 	oddStrings := chain.From[int, string](iter).
 		Filter(func(i int) bool {
 			return i%2 != 0
@@ -23,7 +23,7 @@ func TestChainOne(t *testing.T) {
 	char, err := chain.From[string, rune](oddStrings).
 		Take(3).
 		FlatMap(func(s string) iterator.IntoIterator[rune] {
-			return slice.From([]rune(s))
+			return slice.Marshal([]rune(s))
 		}).
 		Find(func(r rune) bool {
 			return r == rune(51)
