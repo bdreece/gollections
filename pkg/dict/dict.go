@@ -17,6 +17,9 @@ type Pair[TKey comparable, TValue any] struct {
 type Dict[TKey comparable, TValue any] interface {
 	collection.Collection[Pair[TKey, TValue]]
 
+	// Unmarshal returns the underlying Go map
+	Unmarshal() map[TKey]TValue
+
 	// Get returns the value associated with
 	// the given key if it exists, otherwise nil
 	Get(TKey) *TValue
@@ -91,6 +94,10 @@ func (d *dict[TKey, TValue]) Append(
 ) collection.Collection[Pair[TKey, TValue]] {
 	d.Set(pair.Key, pair.Value)
 	return d
+}
+
+func (d *dict[TKey, TValue]) Unmarshal() map[TKey]TValue {
+	return *d
 }
 
 func (d *dict[TKey, TValue]) Get(key TKey) *TValue {

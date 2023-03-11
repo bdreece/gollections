@@ -16,6 +16,9 @@ var (
 type Slice[TItem any] interface {
 	collection.Collection[TItem]
 
+	// Unmarshal returns the underlying Go slice
+	Unmarshal() []TItem
+
 	// First returns the first item in the Slice
 	First() *TItem
 
@@ -64,6 +67,10 @@ func From[TItem any](c collection.Collection[TItem]) Slice[TItem] {
 	s := New[TItem](0, 0)
 	s.Concat(c)
 	return s
+}
+
+func (s *slice[TItem]) Unmarshal() []TItem {
+	return *s
 }
 
 func (s *slice[TItem]) First() *TItem {
