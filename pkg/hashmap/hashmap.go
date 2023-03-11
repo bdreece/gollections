@@ -3,6 +3,7 @@ package hashmap
 import (
 	"fmt"
 	"hash/maphash"
+	"log"
 
 	"github.com/bdreece/gollections/pkg/collection"
 	"github.com/bdreece/gollections/pkg/iterator"
@@ -36,8 +37,19 @@ func New[TKey comparable, TValue any](capacity int) HashMap[TKey, TValue] {
 	}
 }
 
+func From[TKey comparable, TValue any](
+	c collection.Collection[Pair[TKey, TValue]],
+) HashMap[TKey, TValue] {
+	h := New[TKey, TValue](c.Count())
+	h.Concat(c)
+	return h
+}
+
 func (h *hashMap[TKey, TValue]) Count() int {
-	return h.list.Count()
+	return iterator.Reduce(h.list.Iter(),
+		func(count int, l list.List[Pair[TKey, TValue]]) int {
+			return count + l.Count()
+		}, 0)
 }
 
 func (h *hashMap[TKey, TValue]) Concat(
@@ -58,7 +70,9 @@ func (h *hashMap[TKey, TValue]) Collect(
 func (h *hashMap[TKey, TValue]) Append(
 	item Pair[TKey, TValue],
 ) collection.Collection[Pair[TKey, TValue]] {
-	h.Set(item.Key, item.Value)
+	if err := h.Set(item.Key, item.Value); err != nil {
+		log.Fatalf("Error appending HashMap pair: %v\n", err)
+	}
 	return h
 }
 
