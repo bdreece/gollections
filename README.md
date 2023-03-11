@@ -13,6 +13,7 @@ A collection of collections!
   - [Go Type Interop](#go-type-interop)
 - [Packages](#packages)
   - [`pkg/collection`](#collection)
+  - [`pkg/dict`](#dictionary)
   - [`pkg/dll`](#doubly-linked-list)
   - [`pkg/hashmap`](#hash-map)
   - [`pkg/iterator`](#iterator)
@@ -78,6 +79,22 @@ A `collection.Collection[TItem]` provides the following methods:
 
 The `collection.Collection[TItem]` interface also implements the [`iterator.IntoIterator[TItem]`](#iterator) interface.
 
+### Dictionary
+
+The [`pkg/dict`](pkg/dict/) module provides the `dict.Dict[TKey, TValue]` interface, which is a thin wrapper over the primitive Go map; as well as the `dict.Pair[TKey, TValue]` struct, which represents a key-value pair.
+
+A `dict.Dict[TKey, TValue]` provides the following methods:
+
+- `Unmarshal() map[TKey]TValue`
+- `Get(TKey) *TValue`
+- `Set(TKey, TValue)`
+- `Remove(TKey) *TValue`
+
+A `dict.Dict[TKey, TValue]` also implements the following interfaces:
+
+- [`collection.Collection[dict.Pair[TKey, TValue]]`](#collection)
+- [`iterator.IntoIterator[dict.Pair[TKey, TValue]]`](#iterator)
+
 ### Doubly-Linked List
 
 The [`pkg/dll`](pkg/dll/) module provides the `dll.DLL[TItem]` interface, which is implemented as a doubly-linked list of nodes.
@@ -93,16 +110,16 @@ A `dll.DLL[TItem]` implements the following interfaces:
 
 The [`pkg/hashmap`](pkg/hashmap/) module provides the `hashmap.HashMap[TKey, TValue]` interface, which is implemented as a hash map data structure.
 
-A `hashmap.HashMap[TKey, TValue]` implements the following interfaces:
-
-- `collection.Collection[hashmap.Pair[TKey, TValue]]`
-- `iterator.IntoIterator[hashmap.Pair[TKey, TValue]]`
-
-A `hashmap.HashMap[TKey, TValue]` also provides the following methods:
+A `hashmap.HashMap[TKey, TValue]` provides the following methods:
 
 - `Get(TKey) (*TValue, error)`
 - `Set(TKey, TValue) error`
 - `Remove(TKey) (*TValue, error)`
+
+A `hashmap.HashMap[TKey, TValue]` also implements the following interfaces:
+
+- [`collection.Collection[dict.Pair[TKey, TValue]]`](#collection)
+- [`iterator.IntoIterator[dict.Pair[TKey, TValue]]`](#iterator)
 
 ### Iterator
 
@@ -164,6 +181,7 @@ The [`pkg/slice`](pkg/slice) module provides the `slice.Slice[TItem]` interface,
 
 A `slice.Slice[TItem]` provides the following methods:
 
+- `Unmarshal() []TItem`
 - `First() *TItem`
 - `Last() *TItem`
 - `Add(TItem)`
