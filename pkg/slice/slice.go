@@ -5,7 +5,6 @@ import (
 
 	"github.com/bdreece/gollections/pkg/collection"
 	"github.com/bdreece/gollections/pkg/iterator"
-	"github.com/bdreece/gollections/pkg/list"
 )
 
 var (
@@ -13,7 +12,14 @@ var (
 )
 
 type Slice[TItem any] interface {
-	list.List[TItem]
+	collection.Collection[TItem]
+	First() *TItem
+	Last() *TItem
+	Add(TItem)
+	Get(int) (*TItem, error)
+	Set(int, TItem) error
+	Insert(int, TItem) error
+	Remove(int) (*TItem, error)
 }
 
 type slice[TItem any] []TItem
@@ -86,6 +92,17 @@ func (s *slice[TItem]) Set(index int, item TItem) error {
 		return ErrIndexOutOfBounds
 	}
 	(*s)[index] = item
+	return nil
+}
+
+func (s *slice[TItem]) Insert(index int, item TItem) error {
+	if index > len(*s) || index < 0 {
+		return ErrIndexOutOfBounds
+	}
+	before := (*s)[:index]
+	after := append([]TItem{item}, (*s)[index:]...)
+	*s = append(before, after...)
+
 	return nil
 }
 
