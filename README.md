@@ -13,13 +13,13 @@ A collection of collections!
   - [Go Type Interop](#go-type-interop)
 - [Packages](#packages)
   - [`pkg/collection`](#collection)
-  - [`pkg/dll`](#dll)
-  - [`pkg/hashmap`](#hashmap)
+  - [`pkg/dll`](#doubly-linked-list)
+  - [`pkg/hashmap`](#hash-map)
   - [`pkg/iterator`](#iterator)
   - [`pkg/list`](#list)
   - [`pkg/queue`](#queue)
   - [`pkg/slice`](#slice)
-  - [`pkg/sll`](#sll)
+  - [`pkg/sll`](#singly-linked-list)
   - [`pkg/stack`](#stack)
 
 ## Overview
@@ -67,29 +67,32 @@ func main() {
 ### Collection
 
 The [`pkg/collection`](pkg/collection/) module provides the base interface for all
-collection interfaces in this repository. A `collection.Collection[TItem]` provides the
-following methods:
+collection interfaces in this repository.
+
+A `collection.Collection[TItem]` provides the following methods:
 
 - `Concat(iterator.IntoIterator[TItem]) Collection[TItem]`
 - `Collect(iterator.Iterator[TItem]) Collection[TItem]`
 - `Append(TItem) Collection[TItem]`
 - `Count() int`
 
-The `collection.Collection[TItem]` interface also implements the `iterator.IntoIterator[TItem]` interface.
+The `collection.Collection[TItem]` interface also implements the [`iterator.IntoIterator[TItem]`](#iterator) interface.
 
-### dll
+### Doubly-Linked List
 
-The [`pkg/dll`](pkg/dll/) module provides the concrete implementation of a doubly-linked
-list. A `dll.DLL[TItem]` implements the following interfaces:
+The [`pkg/dll`](pkg/dll/) module provides the `dll.DLL[TItem]` interface, which is implemented as a doubly-linked list of nodes.
 
-- `stack.Stack[TItem]`
-- `queue.Queue[TItem]`
-- `collection.Collection[TItem]`
-- `iterator.IntoIterator[TItem]`
+A `dll.DLL[TItem]` implements the following interfaces:
 
-### hashmap
+- [`stack.Stack[TItem]`](#stack)
+- [`queue.Queue[TItem]`](#queue)
+- [`collection.Collection[TItem]`](#collection)
+- [`iterator.IntoIterator[TItem]`](#iterator)
 
-The [`pkg/hashmap`](pkg/hashmap/) module provides the concrete implementation of a hash map.
+### Hash Map
+
+The [`pkg/hashmap`](pkg/hashmap/) module provides the `hashmap.HashMap[TKey, TValue]` interface, which is implemented as a hash map data structure.
+
 A `hashmap.HashMap[TKey, TValue]` implements the following interfaces:
 
 - `collection.Collection[hashmap.Pair[TKey, TValue]]`
@@ -101,11 +104,12 @@ A `hashmap.HashMap[TKey, TValue]` also provides the following methods:
 - `Set(TKey, TValue) error`
 - `Remove(TKey) (*TValue, error)`
 
-### iterator
+### Iterator
 
 The [`pkg/iterator`](pkg/iterator/) module provides iterator interfaces and related functions
-for lazily-iterating over collections. The following functions can be used to operate over an
-`iterator.Iterator[TItem]`:
+for lazily-iterating over collections.
+
+The following functions can be used to operate over an `iterator.Iterator[TItem]`:
 
 - `Chain[TItem](iterator.Iterator[TItem], iterator.Iterator[TItem]) iterator.Iterator[TItem]`
 - `Empty[TItem]() iterator.Iterator[TItem]`
@@ -126,10 +130,75 @@ for lazily-iterating over collections. The following functions can be used to op
 - `Take[TItem](iterator.Iterator[TItem], int) iterator.Iterator[TItem]`
 
 The [`pkg/iterator`](pkg/iterator/) module also provides the `iterator.IntoIterator[TItem]`
-interface implemented by all collections, which provides the following method:
+interface, which provides the following method:
 
 - `Iter[TItem]() iterator.Iterator[TItem]`
 
-### list
+### List
 
 The [`pkg/list`](pkg/list) module provides the `list.List[TItem]` interface, which represents a basic enumerable list.
+
+A `list.List[TItem]` implements the following interfaces:
+
+- [`slice.Slice[TItem]`](#slice)
+- [`collection.Collection[TItem]`](#collection)
+- [`iterator.IntoIterator[TItem]`](#iterator)
+
+### Queue
+
+The [`pkg/queue`](pkg/queue) module provides the `queue.Queue[TItem]` interface, which represents a FIFO buffer.
+
+A `queue.Queue[TItem]` provides the following methods:
+
+- `Enqueue(TItem)`
+- `Dequeue() *TItem`
+
+A `queue.Queue[TItem]` also implements the following interfaces:
+
+- [`collection.Collection[TItem]`](#collection)
+- [`iterator.IntoIterator[TItem]`](#iterator)
+
+### Slice
+
+The [`pkg/slice`](pkg/slice) module provides the `slice.Slice[TItem]` interface, which is implemented as a thin wrapper around the primitive Go slice.
+
+A `slice.Slice[TItem]` provides the following methods:
+
+- `First() *TItem`
+- `Last() *TItem`
+- `Add(TItem)`
+- `Get(int) (*TItem, error)`
+- `Set(int, TItem) error`
+- `Insert(int, TItem) error`
+- `Remove(int) (*TItem, error)`
+
+A `slice.Slice[TItem]` also implements the following interfaces:
+
+- [`collection.Collection[TItem]`](#collection)
+- [`iterator.IntoIterator[TItem]`](#iterator)
+
+### Singly-Linked List
+
+The [`pkg/sll`](pkg/sll) module provides the `sll.SLL[TItem]` interface, which is implemented as a singly-linked list of nodes.
+
+A `sll.SLL[TItem]` implements the following interfaces:
+
+- [`stack.Stack[TItem]`](#stack)
+- [`queue.Queue[TItem]`](#queue)
+- [`collection.Collection[TItem]`](#collection)
+- [`iterator.IntoIterator[TItem]`](#iterator)
+
+### Stack
+
+The [`pkg/stack`](pkg/stack) modules provides the `stack.Stack[TItem]` interface, which represents a FILO buffer
+
+A `stack.Stack[TItem]` provides the following methods:
+
+- `Push(TItem)`
+- `Pop() *TItem`
+- `Peek() *TItem`
+
+A `stack.Stack[TItem]` also implements the following interfaces:
+
+- [`collection.Collection[TItem]`](#collection)
+- [`iterator.IntoIterator[TItem]`](#iterator)
