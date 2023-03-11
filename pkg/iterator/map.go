@@ -1,5 +1,7 @@
 package iterator
 
+// MapFunc represents the predicate function
+// passed to Map
 type MapFunc[TInput any, TOutput any] func(TInput) TOutput
 
 type mapIterator[TInput any, TOutput any] struct {
@@ -7,6 +9,9 @@ type mapIterator[TInput any, TOutput any] struct {
 	pred MapFunc[TInput, TOutput]
 }
 
+// Map returns an iterator of the transformed items
+// of the given iterator, according to the given
+// predicate function
 func Map[TInput any, TOutput any](
 	iter Iterator[TInput],
 	pred MapFunc[TInput, TOutput],

@@ -7,6 +7,8 @@ import (
 	"github.com/bdreece/gollections/pkg/stack"
 )
 
+// DLL provides the implementation of a doubly-linked list
+// of nodes
 type DLL[TItem any] interface {
 	stack.Stack[TItem]
 	queue.Queue[TItem]
@@ -23,10 +25,13 @@ type dll[TItem any] struct {
 	last  *node[TItem]
 }
 
+// New creates an empty DLL
 func New[TItem any]() DLL[TItem] {
 	return &dll[TItem]{nil, nil}
 }
 
+// From creates a new DLL by concatenating the items
+// of the given collection
 func From[TItem any](c collection.Collection[TItem]) DLL[TItem] {
 	d := New[TItem]()
 	d.Concat(c)
@@ -86,6 +91,14 @@ func (d *dll[TItem]) Pop() *TItem {
 	val := d.first.item
 	d.first = d.first.next
 	return &val
+}
+
+func (d *dll[TItem]) Peek() *TItem {
+	if d.first == nil {
+		return nil
+	}
+
+	return &d.first.item
 }
 
 func (d *dll[TItem]) Enqueue(item TItem) {

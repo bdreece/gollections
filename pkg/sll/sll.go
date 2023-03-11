@@ -7,6 +7,7 @@ import (
 	"github.com/bdreece/gollections/pkg/stack"
 )
 
+// SLL provides the implementation of a singly-linked list
 type SLL[TItem any] interface {
 	stack.Stack[TItem]
 	queue.Queue[TItem]
@@ -21,10 +22,13 @@ type sll[TItem any] struct {
 	first *node[TItem]
 }
 
+// New creates a new SLL
 func New[TItem any]() SLL[TItem] {
 	return &sll[TItem]{nil}
 }
 
+// From creates a new SLL by concatenating the items
+// of the given collection
 func From[TItem any](c collection.Collection[TItem]) SLL[TItem] {
 	s := New[TItem]()
 	s.Concat(c)
@@ -64,6 +68,14 @@ func (s *sll[TItem]) Push(item TItem) {
 
 func (s *sll[TItem]) Pop() *TItem {
 	return s.removeFirst()
+}
+
+func (s *sll[TItem]) Peek() *TItem {
+	if s.first == nil {
+		return nil
+	}
+
+	return &s.first.item
 }
 
 func (s *sll[TItem]) Enqueue(item TItem) {

@@ -11,24 +11,50 @@ var (
 	ErrIndexOutOfBounds = errors.New("index out of bounds")
 )
 
+// Slice provides a thin abstraction over the
+// primitive Go slice
 type Slice[TItem any] interface {
 	collection.Collection[TItem]
+
+	// First returns the first item in the Slice
 	First() *TItem
+
+	// Last returns the last item in the Slice
 	Last() *TItem
+
+	// Add appends the given item to the Slice
 	Add(TItem)
+
+	// Get returns the item at the given index
+	// in the Slice, otherwise returns nil and
+	// the respective error
 	Get(int) (*TItem, error)
+
+	// Set value at the given index to the given
+	// item in the Slice, returning any resulting
+	// error
 	Set(int, TItem) error
+
+	// Insert adds the given item at the given index
+	// in the Slice, returning any resulting error
 	Insert(int, TItem) error
+
+	// Remove removes and returns the item at the given
+	// index in the size, otherwise returns nil and the
+	// respective error
 	Remove(int) (*TItem, error)
 }
 
 type slice[TItem any] []TItem
 
+// New creates a new Slice with the given size
+// and capacity
 func New[TItem any](size, capacity int) Slice[TItem] {
 	var s slice[TItem] = make([]TItem, size, capacity)
 	return &s
 }
 
+// From returns a Slice by casting a Go slice
 func From[TItem any](s []TItem) Slice[TItem] {
 	var _s slice[TItem] = s
 	return &_s

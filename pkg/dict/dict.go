@@ -6,25 +6,42 @@ import (
 	"github.com/bdreece/gollections/pkg/slice"
 )
 
+// Pair represents a key-value pair in a Dict
 type Pair[TKey comparable, TValue any] struct {
 	Key   TKey
 	Value TValue
 }
 
+// Dict provides an associative array of key-value
+// pairs, based on the primitive Go map
 type Dict[TKey comparable, TValue any] interface {
 	collection.Collection[Pair[TKey, TValue]]
+
+	// Get returns the value associated with
+	// the given key if it exists, otherwise nil
 	Get(TKey) *TValue
+
+	// Set assigns the given value with the given
+	// key, overwriting an existing value if it
+	// exists
 	Set(TKey, TValue)
+
+	// Remove removes the key-value pair associated
+	// with the given key, returning the previous value
+	// if it exists, otherwise nil
 	Remove(TKey) *TValue
 }
 
 type dict[TKey comparable, TValue any] map[TKey]TValue
 
+// New creates a new Dict with an arbitrary initial size
 func New[TKey comparable, TValue any]() Dict[TKey, TValue] {
 	var d dict[TKey, TValue] = make(map[TKey]TValue)
 	return &d
 }
 
+// From creates a new Dict by concatenating the items
+// of the given collection
 func From[TKey comparable, TValue any](
 	c collection.Collection[Pair[TKey, TValue]],
 ) Dict[TKey, TValue] {
